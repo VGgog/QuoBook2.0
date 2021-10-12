@@ -1,0 +1,45 @@
+body{
+	font-family: 'Roboto', sans-serif;
+}
+details summary::-webkit-details-marker {
+  display:none;
+}
+*{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	text-decoration: none;
+}
+body{
+	max-width: 100%;
+	height: 100%;
+}
+h1{
+	text-align: center;
+	justify-content: center;
+	font-size: 40;
+	height: 100px;
+}
+.content{
+	position: fixed;
+	right: 0;
+	width: 60%;
+	height: 100%;
+	line-height: 70px;
+}
+.sidebar{
+	text-align: center;
+	position: fixed;
+	left: 0;
+	width: 40%;
+	height: 100%;
+
+}
+.sidebar ul a{
+	font-size: 16px;
+	line-height: 2;
+}
+.sidebar header{
+	font-size: 22px;
+	line-height: 70px;
+}
