@@ -4,3 +4,4 @@ venv
 __pycache__
 tasks.txt
 config.py
+migrations
