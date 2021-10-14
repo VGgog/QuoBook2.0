@@ -17,3 +17,12 @@ class Users(db.Model):
         return "User {}".format(self.username)
 
 
+class Quote(db.Model):
+    __tablename__ = 'quotes'
+
+    user_id = db.Column(db.Integer, index=True)
+    quote_id = db.Column(db.Integer, primary_key=True, unique=True)
+    author = db.Column(db.String, index=True)
+    book_title = db.Column(db.String, index=True)
+    quote = db.Column(db.String, index=True)
+
