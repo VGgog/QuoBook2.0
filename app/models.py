@@ -13,6 +13,10 @@ class Users(db.Model):
         """Создаёт хэш пароля"""
         return generate_password_hash(password)
 
+    def check_password(password_hash, password):
+        """"""
+        return check_password_hash(password_hash, password)
+
     def __repr__(self):
         return "User {}".format(self.username)
 
