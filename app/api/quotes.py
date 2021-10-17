@@ -2,19 +2,13 @@ from app.api import bp
 from flask import jsonify, request
 from app.models import Quote, Users
 from app import db
+from app.api import func
 
 
 @bp.route('/quotes/quote/<int:quote_id>', methods=['GET'])
 def send_quotes(quote_id):
-    info_for_quote = Quote.query.get_or_404(quote_id).__dict__
-    quote = {
-        'user_id': info_for_quote['user_id'],
-        'quote_id': info_for_quote['quote_id'],
-        'author': info_for_quote['author'],
-        'book_title': info_for_quote['book_title'],
-        'quote': info_for_quote['quote']
-    }
-    return jsonify(quote)
+    """Возвращает цитату по id цитаты"""
+    return jsonify(func.translates_into_the_correct_format(Quote.query.get_or_404(quote_id).__dict__))
 
 
 @bp.route('/quote/new_quote', methods=['POST'])
