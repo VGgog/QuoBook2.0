@@ -6,7 +6,7 @@ from app.api import func
 
 
 @bp.route('/quotes/quote/<int:quote_id>', methods=['GET'])
-def send_quotes(quote_id):
+def send_quotes_on_quote_id(quote_id):
     """Возвращает цитату по id цитаты"""
     return jsonify(func.translates_into_the_correct_format(Quote.query.get_or_404(quote_id).__dict__))
 
