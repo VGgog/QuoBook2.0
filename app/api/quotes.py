@@ -24,14 +24,19 @@ def add_new_quote():
                 info_for_quote = quote_data['quote']
                 if 'author' and 'book_title' and 'quote' in info_for_quote:
 
-                    user_id = Users.query.filter_by(username=quote_data['login']).first().user_id
-                    quote = Quote(user_id=user_id, quote_id=Quote.query.count() + 1,  author=info_for_quote['author'],
-                                  book_title=info_for_quote['book_title'], quote=info_for_quote['quote'])
-                    db.session.add(quote)
-                    db.session.commit()
+                    # Проверяет наличие цитаты в бд.
+                    if not Quote.query.filter_by(quote=info_for_quote['quote']).first():
 
-                    return jsonify(func.translates_into_the_correct_format(
-                        Quote.query.filter_by(quote=info_for_quote['quote']).first()))
+                        user_id = Users.query.filter_by(username=quote_data['login']).first().user_id
+                        quote = Quote(user_id=user_id, quote_id=Quote.query.count() + 1,  author=info_for_quote['author'],
+                                      book_title=info_for_quote['book_title'], quote=info_for_quote['quote'])
+                        db.session.add(quote)
+                        db.session.commit()
+
+                        return jsonify(func.translates_into_the_correct_format(
+                            Quote.query.filter_by(quote=info_for_quote['quote']).first()))
+
+                    return "This quote already added"
 
                 return "The form of the submitted json is not correct.", 400
             return "Password is incorrect", 401
