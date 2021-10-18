@@ -11,6 +11,20 @@ def send_quotes_on_quote_id(quote_id):
     return jsonify(func.translates_into_the_correct_format(Quote.query.get_or_404(quote_id)))
 
 
+@bp.route('/quote/<string:author_or_book_title>', methods=['GET'])
+def send_quotes_on_author(author_or_book_title):
+    """Возвращает цитату по автору или названию книги"""
+    if Quote.query.filter_by(author=author_or_book_title).first():
+        return jsonify(func.translates_into_the_correct_format(Quote.query.filter_by(
+            author=author_or_book_title).first()))
+
+    if Quote.query.filter_by(book_title=author_or_book_title).first():
+        return jsonify(func.translates_into_the_correct_format(Quote.query.filter_by(
+            book_title=author_or_book_title).first()))
+
+    return "Author or book title not found", 404
+
+
 @bp.route('/new_quote', methods=['POST'])
 def add_new_quote():
     quote_data = request.get_json()
