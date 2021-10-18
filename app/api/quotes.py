@@ -19,35 +19,21 @@ def add_new_quote():
         if Users.query.filter_by(username=quote_data['login']).first():
 
             password_hash = Users.query.filter_by(username=quote_data['login']).first().__dict__['password_hash']
-            user_id = Users.query.filter_by(username=quote_data['login']).first().__dict__['user_id']
             if Users.check_password(password_hash, quote_data['password']):
 
                 info_for_quote = quote_data['quote']
                 if 'author' and 'book_title' and 'quote' in info_for_quote:
-                    count = Quote.query.count()
-                    quote = Quote(user_id=user_id, quote_id=count + 1,  author=info_for_quote['author'],
+
+                    user_id = Users.query.filter_by(username=quote_data['login']).first().__dict__['user_id']
+                    quote = Quote(user_id=user_id, quote_id=Quote.query.count() + 1,  author=info_for_quote['author'],
                                   book_title=info_for_quote['book_title'], quote=info_for_quote['quote'])
                     db.session.add(quote)
                     db.session.commit()
 
-                    #info_for_add_quote = Quote.query.filter_by(quote=info_for_quote['quote']).first().__dict__
-                    user_id = Quote.query.filter_by(quote=info_for_quote['quote']).first().__dict__['user_id']
-                    quote_id = Quote.query.filter_by(quote=info_for_quote['quote']).first().__dict__['quote_id']
-                    author = Quote.query.filter_by(quote=info_for_quote['quote']).first().__dict__['author']
-                    book_title = Quote.query.filter_by(quote=info_for_quote['quote']).first().__dict__['book_title']
-                    quote = Quote.query.filter_by(quote=info_for_quote['quote']).first().__dict__['quote']
-                    new_quote = {
-                        "user_id": user_id,
-                        "quote_id": quote_id,
-                        "quote": {
-                            "author": author,
-                            "book_title": book_title,
-                            "quote": quote
-                        }
-                    }
-                    return jsonify(new_quote)
+                    return jsonify(func.translates_into_the_correct_format(
+                        Quote.query.filter_by(quote=info_for_quote['quote']).first().__dict__))
 
-                return "The form of the submitted json is not correct.", 404
-            return "The specified password is incorrect", 404
-        return "There is no user with this login.", 404
-    return "The form of the submitted json is not correct.", 404
+                return "The form of the submitted json is not correct.", 400
+            return "Password is incorrect", 401
+        return "Login is incorrect", 401
+    return "The form of the submitted json is not correct.", 400
