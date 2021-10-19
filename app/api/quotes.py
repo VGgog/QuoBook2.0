@@ -3,6 +3,7 @@ from flask import jsonify, request
 from app.models import Quote, Users
 from app import db
 from app.api import func
+from random import randrange
 
 
 @bp.route('/quote/<int:quote_id>', methods=['GET'])
@@ -12,7 +13,7 @@ def send_quotes_on_quote_id(quote_id):
 
 
 @bp.route('/quote/<string:author_or_book_title>', methods=['GET'])
-def send_quotes_on_author(author_or_book_title):
+def send_quotes_on_author_or_book_title(author_or_book_title):
     """Возвращает цитату по автору или названию книги"""
     if Quote.query.filter_by(author=author_or_book_title).first():
         return jsonify(func.translates_into_the_correct_format(Quote.query.filter_by(
@@ -23,6 +24,27 @@ def send_quotes_on_author(author_or_book_title):
             book_title=author_or_book_title).first()))
 
     return "Author or book title not found", 404
+
+
+@bp.route('/quotes/<int:count>', methods=['GET'])
+def send_give_count_quotes(count):
+    """Возвращает случайные цитаты в заданном количестве"""
+    quotes = []
+    quotes_id = []
+    i = 0
+    while i < count:
+
+        quote_id = randrange(1, Quote.query.count())
+        if quote_id not in quotes_id:
+
+            quotes.append(func.translates_into_the_correct_format(Quote.query.get_or_404(quote_id)))
+            quotes_id.append(quote_id)
+            i += 1
+
+        if len(quotes_id) == Quote.query.count():
+            break
+
+    return jsonify(quotes), 200
 
 
 @bp.route('/new_quote', methods=['POST'])
