@@ -33,17 +33,14 @@ def send_give_count_quotes(count):
     quotes_id = []
     i = 0
     while i < count:
-
         quote_id = randrange(1, Quote.query.count())
         if quote_id not in quotes_id:
-
             quotes.append(func.translates_into_the_correct_format(Quote.query.get_or_404(quote_id)))
             quotes_id.append(quote_id)
             i += 1
 
         if len(quotes_id) == Quote.query.count():
             break
-
     return jsonify(quotes), 200
 
 
@@ -82,32 +79,20 @@ def add_new_quote():
 
 @bp.route('del_quote/<int:quote_id>', methods=['DELETE'])
 def delete_quote(quote_id):
-    """"""
+    """Delete-метод, удаляет цитату, если её добавляли Вы."""
     quote_data = request.get_json()
     if "login" and "password" in quote_data:
 
-        if Users.query.filter_by(username=quote_data['login']).first():
+        if func.check_user(quote_data):
+            quote = Quote.query.get_or_404(quote_id)
 
-            password_hash = Users.query.filter_by(username=quote_data['login']).first().password_hash
-            if Users.check_password(password_hash, quote_data['password']):
+            if Users.query.filter_by(username=quote_data['login']).first().user_id == quote.user_id:
+                db.session.delete(Quote.query.filter_by(quote_id=quote_id).first())
+                db.session.commit()
+                return jsonify(func.translates_into_the_correct_format(quote)), 200
 
-                user_id = Users.query.filter_by(username=quote_data['login']).first().user_id
-
-                quote = Quote.query.get_or_404(quote_id)
-                quote_user_id = quote.user_id
-
-                if user_id == quote_user_id:
-                    db.session.delete(Quote.query.filter_by(quote_id=quote_id).first())
-                    db.session.commit()
-
-                    return jsonify(func.translates_into_the_correct_format(quote)), 200
-
-                return "You do not have permission to delete this quote.", 403
-
-            return "Password is incorrect", 401
-
-        return "Login is incorrect", 401
-
+            return "You do not have permission to delete this quote.", 403
+        return "Login or password is incorrect", 401
     return "The form of the submitted json is not correct.", 400
 
 
