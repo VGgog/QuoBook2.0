@@ -46,34 +46,27 @@ def send_give_count_quotes(count):
 
 @bp.route('/new_quote', methods=['POST'])
 def add_new_quote():
+    """Добавляет новую цитату"""
     quote_data = request.get_json()
     if 'login' and 'password' and 'quote' in quote_data:
+        if func.check_user(quote_data):
 
-        if Users.query.filter_by(username=quote_data['login']).first():
+            info_for_quote = quote_data['quote']
+            if 'author' and 'book_title' and 'quote' in info_for_quote:
 
-            password_hash = Users.query.filter_by(username=quote_data['login']).first().password_hash
-            if Users.check_password(password_hash, quote_data['password']):
+                # Проверяет наличие цитаты в бд.
+                if not Quote.query.filter_by(quote=info_for_quote['quote']).first():
+                    user_id = Users.query.filter_by(username=quote_data['login']).first().user_id
+                    quote = Quote(user_id=user_id, quote_id=Quote.query.count() + 1,  author=info_for_quote['author'],
+                                  book_title=info_for_quote['book_title'], quote=info_for_quote['quote'])
+                    db.session.add(quote)
+                    db.session.commit()
+                    return jsonify(func.translates_into_the_correct_format(
+                        Quote.query.filter_by(quote=info_for_quote['quote']).first()))
 
-                info_for_quote = quote_data['quote']
-                if 'author' and 'book_title' and 'quote' in info_for_quote:
-
-                    # Проверяет наличие цитаты в бд.
-                    if not Quote.query.filter_by(quote=info_for_quote['quote']).first():
-
-                        user_id = Users.query.filter_by(username=quote_data['login']).first().user_id
-                        quote = Quote(user_id=user_id, quote_id=Quote.query.count() + 1,  author=info_for_quote['author'],
-                                      book_title=info_for_quote['book_title'], quote=info_for_quote['quote'])
-                        db.session.add(quote)
-                        db.session.commit()
-
-                        return jsonify(func.translates_into_the_correct_format(
-                            Quote.query.filter_by(quote=info_for_quote['quote']).first()))
-
-                    return "This quote already added"
-
-                return "The form of the submitted json is not correct.", 400
-            return "Password is incorrect", 401
-        return "Login is incorrect", 401
+                return "This quote already added"
+            return "The form of the submitted json is not correct.", 400
+        return "Login or password is incorrect", 401
     return "The form of the submitted json is not correct.", 400
 
 
@@ -94,5 +87,3 @@ def delete_quote(quote_id):
             return "You do not have permission to delete this quote.", 403
         return "Login or password is incorrect", 401
     return "The form of the submitted json is not correct.", 400
-
-
