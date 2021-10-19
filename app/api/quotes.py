@@ -78,3 +78,36 @@ def add_new_quote():
             return "Password is incorrect", 401
         return "Login is incorrect", 401
     return "The form of the submitted json is not correct.", 400
+
+
+@bp.route('del_quote/<int:quote_id>', methods=['DELETE'])
+def delete_quote(quote_id):
+    """"""
+    quote_data = request.get_json()
+    if "login" and "password" in quote_data:
+
+        if Users.query.filter_by(username=quote_data['login']).first():
+
+            password_hash = Users.query.filter_by(username=quote_data['login']).first().password_hash
+            if Users.check_password(password_hash, quote_data['password']):
+
+                user_id = Users.query.filter_by(username=quote_data['login']).first().user_id
+
+                quote = Quote.query.get_or_404(quote_id)
+                quote_user_id = quote.user_id
+
+                if user_id == quote_user_id:
+                    db.session.delete(Quote.query.filter_by(quote_id=quote_id).first())
+                    db.session.commit()
+
+                    return jsonify(func.translates_into_the_correct_format(quote)), 200
+
+                return "You do not have permission to delete this quote.", 403
+
+            return "Password is incorrect", 401
+
+        return "Login is incorrect", 401
+
+    return "The form of the submitted json is not correct.", 400
+
+
