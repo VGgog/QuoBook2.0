@@ -1,6 +1,6 @@
 # Модуль для работы с функциями
 
-from app.models import Users
+from app.models import Users, Quote
 
 
 def translates_into_the_correct_format(info_for_quote):
@@ -36,3 +36,10 @@ def checking_correctness_json(quote_data):
 
     return False
 
+
+def made_quote_obj(quote_data, quote_id):
+    """"""
+    quote_info = quote_data['quote']
+    user_id = Users.query.filter_by(username=quote_data['login']).first().user_id
+    return Quote(user_id=user_id, quote_id=quote_id,  author=quote_info['author'],
+                 book_title=quote_info['book_title'], quote=quote_info['quote'])
