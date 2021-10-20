@@ -72,7 +72,7 @@ def add_new_quote():
 
 @bp.route('/put_quote', methods=['PUT'])
 def add_or_update_quote():
-    """"""
+    """PUT-methods"""
     quote_data = request.get_json()
     if func.checking_correctness_json(quote_data):
         if func.check_user(quote_data):
@@ -80,22 +80,15 @@ def add_or_update_quote():
             quote_id = info_for_quote['quote_id']
             user_id = Users.query.filter_by(username=quote_data['login']).first().user_id
             if quote_id:
+                quote = Quote(user_id=user_id, quote_id=quote_id, author=info_for_quote['author'],
+                              book_title=info_for_quote['book_title'], quote=info_for_quote['quote'])
+
                 if Quote.query.filter_by(quote_id=quote_id).first():
                     db.session.delete(Quote.query.filter_by(quote_id=quote_id).first())
-                    quote = Quote(user_id=user_id, quote_id=quote_id, author=info_for_quote['author'],
-                                  book_title=info_for_quote['book_title'], quote=info_for_quote['quote'])
-                    db.session.add(quote)
-                    db.session.commit()
-                    print("Изменили ")
-                else:
-                    quote = Quote(user_id=user_id, quote_id=quote_id, author=info_for_quote['author'],
-                                  book_title=info_for_quote['book_title'], quote=info_for_quote['quote'])
-                    db.session.add(quote)
-                    db.session.commit()
-                    print("Добавили ")
 
-                return jsonify(func.translates_into_the_correct_format(
-                    Quote.query.filter_by(quote=info_for_quote['quote']).first()))
+                db.session.add(quote)
+                db.session.commit()
+                return jsonify(func.translates_into_the_correct_format(quote))
             return "The form of the submitted json is not correct.", 400
         return "Login or password is incorrect", 401
     return "The form of the submitted json is not correct.", 400
