@@ -70,6 +70,27 @@ def add_new_quote():
     return "The form of the submitted json is not correct.", 400
 
 
+@bp.route('/put_quote', methods=['PUT'])
+def add_or_update_quote():
+    """"""
+    quote_data = request.get_json()
+    if func.checking_correctness_json(quote_data):
+        if func.check_user(quote_data):
+            info_for_quote = quote_data['quote']
+            if not Quote.query.filter_by(quote=info_for_quote['quote']).first():
+                user_id = Users.query.filter_by(username=quote_data['login']).first().user_id
+                quote = Quote(user_id=user_id, quote_id=Quote.query.count() + 1, author=info_for_quote['author'],
+                              book_title=info_for_quote['book_title'], quote=info_for_quote['quote'])
+                db.session.add(quote)
+                db.session.commit()
+                return jsonify(func.translates_into_the_correct_format(
+                    Quote.query.filter_by(quote=info_for_quote['quote']).first()))
+            else:
+                pass
+        return "Login or password is incorrect", 401
+    return "The form of the submitted json is not correct.", 400
+
+
 @bp.route('del_quote/<int:quote_id>', methods=['DELETE'])
 def delete_quote(quote_id):
     """Delete-метод, удаляет цитату, если её добавляли Вы."""
