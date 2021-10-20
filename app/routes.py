@@ -22,7 +22,9 @@ def reg():
         if Users.query.filter_by(username=login.username.data).first():
             flash('Пользователь под таким логином уже существует.')
             return redirect(url_for('reg'))
-        user = Users(username=login.username.data, password_hash=Users.make_password_hash(login.password.data))
+        
+        user = Users(user_id=Users.query.count() + 1, username=login.username.data,
+                     password_hash=Users.make_password_hash(login.password.data))
         db.session.add(user)
         db.session.commit()
         flash('Вы успешно зарегистрировались.')
