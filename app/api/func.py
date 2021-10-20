@@ -25,3 +25,14 @@ def check_user(quote_data):
             return True
 
     return False
+
+
+def checking_correctness_json(quote_data):
+    """Проверяет правильность отправленного json"""
+    if 'login' and 'password' and 'quote' in quote_data:
+        info_for_quote = quote_data['quote']
+        if 'author' and 'book_title' and 'quote' in info_for_quote:
+            return True
+
+    return False
+
