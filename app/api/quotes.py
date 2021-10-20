@@ -78,14 +78,11 @@ def add_or_update_quote():
         if func.check_user(quote_data):
             info_for_quote = quote_data['quote']
             quote_id = info_for_quote['quote_id']
-            user_id = Users.query.filter_by(username=quote_data['login']).first().user_id
             if quote_id:
-                quote = Quote(user_id=user_id, quote_id=quote_id, author=info_for_quote['author'],
-                              book_title=info_for_quote['book_title'], quote=info_for_quote['quote'])
-
                 if Quote.query.filter_by(quote_id=quote_id).first():
                     db.session.delete(Quote.query.filter_by(quote_id=quote_id).first())
 
+                quote = func.made_quote_obj(quote_data)
                 db.session.add(quote)
                 db.session.commit()
                 return jsonify(func.translates_into_the_correct_format(quote))
