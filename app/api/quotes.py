@@ -60,9 +60,12 @@ def add_new_quote():
             info_for_quote = quote_data['quote']
 
             if quote_id:
-                if Quote.query.filter_by(quote_id=quote_id).first():
-                    db.session.delete(Quote.query.filter_by(quote_id=quote_id).first())
-                quote = func.made_quote_obj(quote_data, quote_id=quote_id)
+                if func.check_user_id_and_quote_user_id(quote_data, quote_id):
+                    if Quote.query.filter_by(quote_id=quote_id).first():
+                        db.session.delete(Quote.query.filter_by(quote_id=quote_id).first())
+                    quote = func.made_quote_obj(quote_data, quote_id=quote_id)
+                else:
+                    return "You do not have permission to update this quote.", 403
             else:
                 if Quote.query.filter_by(quote=info_for_quote['quote']).first():
                     return "This quote already added.", 404
