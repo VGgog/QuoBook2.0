@@ -38,8 +38,18 @@ def checking_correctness_json(quote_data):
 
 
 def made_quote_obj(quote_data, quote_id):
-    """"""
+    """Возвращает цитату в виде объекта"""
     quote_info = quote_data['quote']
     user_id = Users.query.filter_by(username=quote_data['login']).first().user_id
     return Quote(user_id=user_id, quote_id=quote_id,  author=quote_info['author'],
                  book_title=quote_info['book_title'], quote=quote_info['quote'])
+
+
+def check_user_id_and_quote_user_id(quote_data, quote_id):
+    """Проверяет user_id цитаты и user_id логина который отправили в запросе."""
+    quote = Quote.query.get_or_404(quote_id)
+
+    if Users.query.filter_by(username=quote_data['login']).first().user_id == quote.user_id:
+        return True
+
+    return False
