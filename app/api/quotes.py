@@ -44,43 +44,34 @@ def send_give_count_quotes(count):
     return jsonify(quotes), 200
 
 
-@bp.route('/new_quote', methods=['POST'])
+@bp.route('/new_quote', methods=['POST', 'PUT'])
 def add_new_quote():
     """Добавляет новую цитату"""
+    quote_id = None
+    if request.args.get('quote_id'):
+        try:
+            quote_id = int(request.args['quote_id'])
+        except ValueError:
+            return "Not true request", 400
+
     quote_data = request.get_json()
     if func.checking_correctness_json(quote_data):
         if func.check_user(quote_data):
             info_for_quote = quote_data['quote']
-            # Проверяет наличие цитаты в бд.
-            if not Quote.query.filter_by(quote=info_for_quote['quote']).first():
-                quote = func.made_quote_obj(quote_data, quote_id=Quote.query.count()+1)
 
-                db.session.add(quote)
-                db.session.commit()
-                return jsonify(func.translates_into_the_correct_format(
-                    Quote.query.filter_by(quote=info_for_quote['quote']).first()))
-            return "This quote already added"
-        return "Login or password is incorrect", 401
-    return "The form of the submitted json is not correct.", 400
-
-
-@bp.route('/put_quote', methods=['PUT'])
-def add_or_update_quote():
-    """PUT-methods"""
-    quote_data = request.get_json()
-    if func.checking_correctness_json(quote_data):
-        if func.check_user(quote_data):
-            info_for_quote = quote_data['quote']
-            quote_id = info_for_quote['quote_id']
             if quote_id:
                 if Quote.query.filter_by(quote_id=quote_id).first():
                     db.session.delete(Quote.query.filter_by(quote_id=quote_id).first())
+                quote = func.made_quote_obj(quote_data, quote_id=quote_id)
+            else:
+                if Quote.query.filter_by(quote=info_for_quote['quote']).first():
+                    return "This quote already added.", 404
 
-                quote = func.made_quote_obj(quote_data, quote_id)
-                db.session.add(quote)
-                db.session.commit()
-                return jsonify(func.translates_into_the_correct_format(quote))
-            return "The form of the submitted json is not correct.", 400
+                quote = func.made_quote_obj(quote_data, quote_id=Quote.query.count() + 1)
+            db.session.add(quote)
+            db.session.commit()
+            return jsonify(func.translates_into_the_correct_format(
+                Quote.query.filter_by(quote=info_for_quote['quote']).first())), 200
         return "Login or password is incorrect", 401
     return "The form of the submitted json is not correct.", 400
 
