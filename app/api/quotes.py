@@ -86,9 +86,8 @@ def delete_quote(quote_id):
     if "login" and "password" in quote_data:
 
         if func.check_user(quote_data):
-            quote = Quote.query.get_or_404(quote_id)
-
-            if Users.query.filter_by(username=quote_data['login']).first().user_id == quote.user_id:
+            if func.check_user_id_and_quote_user_id(quote_data, quote_id):
+                quote = Quote.query.filter_by(quote_id=quote_id).first()
                 db.session.delete(Quote.query.filter_by(quote_id=quote_id).first())
                 db.session.commit()
                 return jsonify(func.translates_into_the_correct_format(quote)), 200
