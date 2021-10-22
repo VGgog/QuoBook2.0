@@ -54,3 +54,11 @@ def check_user_id_and_quote_user_id(quote_data, quote_id):
         return True
 
     return False
+
+
+def checking_correct_json2(quote_data):
+    """Проверяет наличие нужных полей в отправленном json-файле"""
+    if 'login' and 'password' in quote_data:
+        return True
+
+    return False
