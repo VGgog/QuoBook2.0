@@ -91,6 +91,7 @@ def req():
 
 @bp.route('/changed_password', methods=['PUT'])
 def changed_pass():
+    """Позволяет поменять пароль"""
     quote_data = request.get_json()
     if func.checking_correct_json2(quote_data) and ('new_password' in quote_data):
         if func.check_user(quote_data):
@@ -136,6 +137,21 @@ def add_new_quote():
             return jsonify(func.translates_into_the_correct_format(
                 Quote.query.filter_by(quote=info_for_quote['quote']).first())), 200
         return "Login or password is incorrect", 401
+    return "The form of the submitted json is not correct.", 400
+
+
+@bp.route('/del_user', methods=['DELETE'])
+def delete_user():
+    """Удаляет пользователя"""
+    quote_data = request.get_json()
+    if func.checking_correct_json2(quote_data):
+        if Users.query.filter_by(username=quote_data['login']).first():
+            if func.check_user(quote_data):
+                db.session.delete(Users.query.filter_by(username=quote_data['login']).first())
+                db.session.commit()
+                return "This user successful delete", 200
+            return "Login or password is incorrect", 401
+        return "This login not found", 404
     return "The form of the submitted json is not correct.", 400
 
 
