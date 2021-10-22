@@ -1,5 +1,4 @@
 from app import db
-from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class Users(db.Model):
@@ -8,14 +7,6 @@ class Users(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, index=True, unique=True)
     password_hash = db.Column(db.String, index=True, unique=True)
-
-    def make_password_hash(password):
-        """Создаёт хэш пароля"""
-        return generate_password_hash(password)
-
-    def check_password(password_hash, password):
-        """"""
-        return check_password_hash(password_hash, password)
 
     def __repr__(self):
         return "User {}".format(self.username)
@@ -29,4 +20,7 @@ class Quote(db.Model):
     author = db.Column(db.String, index=True)
     book_title = db.Column(db.String, index=True)
     quote = db.Column(db.String, index=True)
+
+    def __repr__(self):
+        return "Quote_id: {}".format(self.quote_id)
 
