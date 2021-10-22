@@ -1,7 +1,7 @@
 from app.api import bp
 from flask import jsonify, request
 from app.models import Quote, Users
-from app import db
+from app import db, passwords
 from app.api import func
 from random import randrange, choice
 
@@ -71,6 +71,21 @@ def send_all_quote_id_which_add_user():
             return jsonify(quotes_id)
         return 'You not add quotes', 404
 
+    return "The form of the submitted json is not correct.", 400
+
+
+@bp.route('/registration', methods=['POST'])
+def req():
+    """Регистрация нового пользователя"""
+    quote_data = request.get_json()
+    if func.checking_correct_json2(quote_data):
+        if not Users.query.filter_by(username=quote_data['login']).first():
+            user = Users(user_id=Users.query.count() + 1, username=quote_data['login'],
+                         password_hash=passwords.make_password_hash(quote_data['password']))
+            db.session.add(user)
+            db.session.commit()
+            return "You have successful registered", 200
+        return "A user with this username already exists", 401
     return "The form of the submitted json is not correct.", 400
 
 
