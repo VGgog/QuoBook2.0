@@ -89,6 +89,21 @@ def req():
     return "The form of the submitted json is not correct.", 400
 
 
+@bp.route('/changed_password', methods=['PUT'])
+def changed_pass():
+    quote_data = request.get_json()
+    if func.checking_correct_json2(quote_data) and ('new_password' in quote_data):
+        if func.check_user(quote_data):
+            if Users.query.filter_by(username=quote_data['login']).first():
+                user = Users.query.filter_by(username=quote_data['login']).first()
+                user.password_hash = passwords.make_password_hash(quote_data['new_password'])
+                db.session.commit()
+                return "You have successful changed password", 200
+            return "This login not found", 404
+        return "Login or password is incorrect", 401
+    return "The form of the submitted json is not correct.", 400
+
+
 @bp.route('/new_quote', methods=['POST', 'PUT'])
 def add_new_quote():
     """Добавляет новую цитату или изменяет существующую """
