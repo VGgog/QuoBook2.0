@@ -113,7 +113,7 @@ def add_new_quote():
 def delete_quote(quote_id):
     """Delete-метод, удаляет цитату, если Вы её добавляли."""
     quote_data = request.get_json()
-    if "login" and "password" in quote_data:
+    if func.checking_correct_json2(quote_data):
 
         if func.check_user(quote_data):
             if func.check_user_id_and_quote_user_id(quote_data, quote_id):
