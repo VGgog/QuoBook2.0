@@ -3,7 +3,7 @@ from flask import jsonify, request
 from app.models import Quote, Users
 from app import db
 from app.api import func
-from random import randrange
+from random import randrange, choice
 
 
 @bp.route('/quote/<int:quote_id>', methods=['GET'])
@@ -26,6 +26,20 @@ def send_quotes_on_author_or_book_title(author_or_book_title):
     return "Author or book title not found", 404
 
 
+@bp.route('/quote/<string:author>/<string:book_title>', methods=['GET'])
+def send_quotes_author_and_book_title(author, book_title):
+    """Фильтрует цитаты по автору и названию книги, и возвращает случайную цитату"""
+    quotes = []
+    for quote in Quote.query.filter_by(author=author):
+        if quote.book_title == book_title:
+            quotes.append(quote)
+
+    if quotes:
+        return jsonify(func.translates_into_the_correct_format(choice(quotes)))
+
+    return "Quote not found", 404
+
+
 @bp.route('/quotes/<int:count>', methods=['GET'])
 def send_give_count_quotes(count):
     """Возвращает случайные цитаты в заданном количестве"""
@@ -46,7 +60,7 @@ def send_give_count_quotes(count):
 
 @bp.route('/new_quote', methods=['POST', 'PUT'])
 def add_new_quote():
-    """Добавляет новую цитату"""
+    """Добавляет новую цитату или изменяет существующую """
     quote_id = None
     if request.args.get('quote_id'):
         try:
@@ -81,7 +95,7 @@ def add_new_quote():
 
 @bp.route('del_quote/<int:quote_id>', methods=['DELETE'])
 def delete_quote(quote_id):
-    """Delete-метод, удаляет цитату, если её добавляли Вы."""
+    """Delete-метод, удаляет цитату, если Вы её добавляли."""
     quote_data = request.get_json()
     if "login" and "password" in quote_data:
 
