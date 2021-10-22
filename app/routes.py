@@ -2,6 +2,7 @@ from app import app, db
 from flask import render_template, flash, redirect, url_for
 from app.forms import LoginForm
 from app.models import Users
+from app import passwords
 
 
 @app.route('/')
@@ -26,7 +27,7 @@ def reg():
             flash('Пользователь под таким логином уже существует.')
             return redirect(url_for('reg'))
         user = Users(user_id=Users.query.count() + 1, username=login.username.data,
-                     password_hash=Users.make_password_hash(login.password.data))
+                     password_hash=passwords.make_password_hash(login.password.data))
         db.session.add(user)
         db.session.commit()
         flash('Вы успешно зарегистрировались.')

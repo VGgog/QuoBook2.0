@@ -1,6 +1,7 @@
 # Модуль для работы с функциями
 
 from app.models import Users, Quote
+from app import passwords
 
 
 def translates_into_the_correct_format(info_for_quote):
@@ -21,7 +22,7 @@ def check_user(quote_data):
     if Users.query.filter_by(username=quote_data['login']).first():
 
         password_hash = Users.query.filter_by(username=quote_data['login']).first().password_hash
-        if Users.check_password(password_hash, quote_data['password']):
+        if passwords.check_password(password_hash, quote_data['password']):
             return True
 
     return False
