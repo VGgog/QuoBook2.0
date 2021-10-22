@@ -58,6 +58,22 @@ def send_give_count_quotes(count):
     return jsonify(quotes), 200
 
 
+@bp.route('/all_quotes', methods=['POST'])
+def send_all_quote_id_which_add_user():
+    """Возвращает id всех цитат, добавленных пользователем"""
+    quote_data = request.get_json()
+    quotes_id = []
+    if func.checking_correct_json2(quote_data):
+        user_id = Users.query.filter_by(username=quote_data['login']).first().user_id
+        for quote in Quote.query.filter_by(user_id=user_id):
+            quotes_id.append({'quote_id': quote.quote_id})
+        if quotes_id:
+            return jsonify(quotes_id)
+        return 'You not add quotes', 404
+
+    return "The form of the submitted json is not correct.", 400
+
+
 @bp.route('/new_quote', methods=['POST', 'PUT'])
 def add_new_quote():
     """Добавляет новую цитату или изменяет существующую """
