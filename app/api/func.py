@@ -62,3 +62,13 @@ def checking_correct_json2(quote_data):
         return True
 
     return False
+
+
+def transfer_to_int(integer):
+    """Переводит строку в число"""
+    if integer:
+        try:
+            quote_id = int(integer)
+            return quote_id
+        except ValueError:
+            return None
