@@ -75,18 +75,20 @@ def send_all_quote_id_which_add_user():
 
 
 @bp.route('/registration', methods=['POST'])
-def req():
+def registration_new_user():
     """Регистрация нового пользователя"""
     quote_data = request.get_json()
-    if func.checking_correct_json2(quote_data):
-        if not Users.query.filter_by(username=quote_data['login']).first():
-            user = Users(user_id=Users.query.count() + 1, username=quote_data['login'],
-                         password_hash=passwords.make_password_hash(quote_data['password']))
-            db.session.add(user)
-            db.session.commit()
-            return "You have successful registered", 200
+    if not func.checking_correct_json2(quote_data):
+        return "The form of the submitted json is not correct.", 400
+
+    if Users.query.filter_by(username=quote_data['login']).first():
         return "A user with this username already exists", 401
-    return "The form of the submitted json is not correct.", 400
+
+    user = Users(user_id=Users.query.count() + 1, username=quote_data['login'],
+                 password_hash=passwords.make_password_hash(quote_data['password']))
+    db.session.add(user)
+    db.session.commit()
+    return "You have successful registered", 200
 
 
 @bp.route('/changed_password', methods=['PUT'])
