@@ -95,16 +95,19 @@ def registration_new_user():
 def changed_pass():
     """Позволяет поменять пароль"""
     quote_data = request.get_json()
-    if func.checking_correct_json2(quote_data) and ('new_password' in quote_data):
-        if func.check_user(quote_data):
-            if Users.query.filter_by(username=quote_data['login']).first():
-                user = Users.query.filter_by(username=quote_data['login']).first()
-                user.password_hash = passwords.make_password_hash(quote_data['new_password'])
-                db.session.commit()
-                return "You have successful changed password", 200
-            return "This login not found", 404
+    if not func.checking_correct_json2(quote_data) and ('new_password' in quote_data):
+        return "The form of the submitted json is not correct.", 400
+
+    if not func.check_user(quote_data):
         return "Login or password is incorrect", 401
-    return "The form of the submitted json is not correct.", 400
+
+    if not Users.query.filter_by(username=quote_data['login']).first():
+        return "This login not found", 404
+
+    user = Users.query.filter_by(username=quote_data['login']).first()
+    user.password_hash = passwords.make_password_hash(quote_data['new_password'])
+    db.session.commit()
+    return "You have successful changed password", 200
 
 
 @bp.route('/new_quote', methods=['POST', 'PUT'])
