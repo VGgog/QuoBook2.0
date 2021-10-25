@@ -159,15 +159,16 @@ def delete_user():
 def delete_quote(quote_id):
     """Delete-метод, удаляет цитату, если Вы её добавляли."""
     quote_data = request.get_json()
-    if func.checking_correct_json2(quote_data):
+    if not func.checking_correct_json2(quote_data):
+        return "The form of the submitted json is not correct.", 400
 
-        if func.check_user(quote_data):
-            if func.check_user_id_and_quote_user_id(quote_data, quote_id):
-                quote = Quote.query.filter_by(quote_id=quote_id).first()
-                db.session.delete(Quote.query.filter_by(quote_id=quote_id).first())
-                db.session.commit()
-                return jsonify(func.translates_into_the_correct_format(quote)), 200
-
-            return "You do not have permission to delete this quote.", 403
+    if not func.check_user(quote_data):
         return "Login or password is incorrect", 401
-    return "The form of the submitted json is not correct.", 400
+
+    if not func.check_user_id_and_quote_user_id(quote_data, quote_id):
+        return "You do not have permission to delete this quote.", 403
+
+    quote = Quote.query.filter_by(quote_id=quote_id).first()
+    db.session.delete(Quote.query.filter_by(quote_id=quote_id).first())
+    db.session.commit()
+    return jsonify(func.translates_into_the_correct_format(quote)), 200
