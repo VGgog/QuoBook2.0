@@ -113,36 +113,32 @@ def changed_pass():
 @bp.route('/new_quote', methods=['POST', 'PUT'])
 def add_new_quote():
     """Добавляет новую цитату или изменяет существующую """
-    quote_id = None
-    if request.args.get('quote_id'):
-        try:
-            quote_id = int(request.args['quote_id'])
-        except ValueError:
-            return "Not true request", 400
-
+    quote_id = func.transfer_to_int(request.args.get('quote_id'))
     quote_data = request.get_json()
-    if func.checking_correctness_json(quote_data):
-        if func.check_user(quote_data):
-            info_for_quote = quote_data['quote']
 
-            if quote_id:
-                if func.check_user_id_and_quote_user_id(quote_data, quote_id):
-                    if Quote.query.filter_by(quote_id=quote_id).first():
-                        db.session.delete(Quote.query.filter_by(quote_id=quote_id).first())
-                    quote = func.made_quote_obj(quote_data, quote_id=quote_id)
-                else:
-                    return "You do not have permission to update this quote.", 403
-            else:
-                if Quote.query.filter_by(quote=info_for_quote['quote']).first():
-                    return "This quote already added.", 404
-
-                quote = func.made_quote_obj(quote_data, quote_id=Quote.query.count() + 1)
-            db.session.add(quote)
-            db.session.commit()
-            return jsonify(func.translates_into_the_correct_format(
-                Quote.query.filter_by(quote=info_for_quote['quote']).first())), 200
+    if not func.checking_correctness_json(quote_data):
+        return "The form of the submitted json is not correct.", 400
+    if not func.check_user(quote_data):
         return "Login or password is incorrect", 401
-    return "The form of the submitted json is not correct.", 400
+
+    quote_text = quote_data['quote']['quote']
+    if Quote.query.filter_by(quote=quote_text).first():
+        return "This quote already added.", 404
+
+    if quote_id:
+        if not func.check_user_id_and_quote_user_id(quote_data, quote_id):
+            return "You do not have permission to update this quote.", 403
+
+        if Quote.query.filter_by(quote_id=quote_id).first():
+            db.session.delete(Quote.query.filter_by(quote_id=quote_id).first())
+        quote = func.made_quote_obj(quote_data, quote_id=quote_id)
+    else:
+        quote = func.made_quote_obj(quote_data, quote_id=Quote.query.count() + 1)
+
+    db.session.add(quote)
+    db.session.commit()
+    return jsonify(func.translates_into_the_correct_format(
+        Quote.query.filter_by(quote=quote_text).first())), 200
 
 
 @bp.route('/del_user', methods=['DELETE'])
