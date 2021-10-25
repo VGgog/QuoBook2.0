@@ -144,15 +144,18 @@ def add_new_quote():
 def delete_user():
     """Удаляет пользователя"""
     quote_data = request.get_json()
-    if func.checking_correct_json2(quote_data):
-        if Users.query.filter_by(username=quote_data['login']).first():
-            if func.check_user(quote_data):
-                db.session.delete(Users.query.filter_by(username=quote_data['login']).first())
-                db.session.commit()
-                return "This user successful delete", 200
-            return "Login or password is incorrect", 401
+    if not func.checking_correct_json2(quote_data):
+        return "The form of the submitted json is not correct.", 400
+
+    if not Users.query.filter_by(username=quote_data['login']).first():
         return "This login not found", 404
-    return "The form of the submitted json is not correct.", 400
+
+    if not func.check_user(quote_data):
+        return "Login or password is incorrect", 401
+
+    db.session.delete(Users.query.filter_by(username=quote_data['login']).first())
+    db.session.commit()
+    return "This user successful delete", 200
 
 
 @bp.route('del_quote/<int:quote_id>', methods=['DELETE'])
