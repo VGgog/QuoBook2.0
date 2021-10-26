@@ -7,6 +7,7 @@ class Users(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, index=True, unique=True)
     password_hash = db.Column(db.String, index=True, unique=True)
+    token = db.Column(db.Text)
 
     def __repr__(self):
         return "User {}".format(self.username)
