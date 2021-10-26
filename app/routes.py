@@ -18,7 +18,7 @@ def docs():
     return render_template('documentation.html', title='Documentation')
 
 
-@app.route('/registration', methods=['GET', 'POST'])
+@app.route('/token', methods=['GET', 'POST'])
 def reg():
     """Возвращает страницу с регистрацией"""
     login = forms.RegistrationForm()
@@ -37,4 +37,4 @@ def reg():
         db.session.commit()
         flash('Вы успешно зарегистрировались.')
         return redirect(url_for('reg'))
-    return render_template('registration.html', title='Registration', form=login)
+    return render_template('token.html', title='Token', form=login)
