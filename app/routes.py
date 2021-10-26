@@ -32,11 +32,11 @@ def reg():
             return redirect(url_for('reg'))
 
         user = Users(user_id=Users.query.count() + 1, username=login.username.data,
-                     password_hash=passwords.make_password_hash(login.password.data))
+                     password_hash=passwords.make_password_hash(login.password.data), token=passwords.generate_token())
         db.session.add(user)
         db.session.commit()
         flash('Вы успешно зарегистрировались.')
-        return redirect(url_for('reg'))
+        return redirect(url_for('get_token'))
     return render_template('registration.html', title='registration', form=login)
 
 
