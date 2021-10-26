@@ -18,7 +18,7 @@ def docs():
     return render_template('documentation.html', title='Documentation')
 
 
-@app.route('/token', methods=['GET', 'POST'])
+@app.route('/registration', methods=['GET', 'POST'])
 def reg():
     """Возвращает страницу с регистрацией"""
     login = forms.RegistrationForm()
@@ -37,4 +37,22 @@ def reg():
         db.session.commit()
         flash('Вы успешно зарегистрировались.')
         return redirect(url_for('reg'))
-    return render_template('token.html', title='Token', form=login)
+    return render_template('registration.html', title='registration', form=login)
+
+
+@app.route('/token', methods=['GET', 'POST'])
+def get_token():
+    """Страница получения токена"""
+    login = forms.LoginForm()
+    if login.validate_on_submit():
+        pass
+    return render_template('token.html', title='token', form=login)
+
+
+@app.route('/delete_profile', methods=['GET', 'POST'])
+def delete_profile():
+    """Страница удаления профиля"""
+    login = forms.DeleteForm()
+    if login.validate_on_submit():
+        pass
+    return render_template('delete.html', title='delete profile', form=login)
