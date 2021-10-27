@@ -64,5 +64,9 @@ def delete_profile():
     """Страница удаления профиля"""
     login = forms.DeleteForm()
     if login.validate_on_submit():
-        pass
+        if function.check_user(login.username.data, login.password.data, 'delete_profile'):
+            flash('Профиль удалён.')
+            db.session.delete(Users.query.filter_by(username=login.username.data).first())
+            db.session.commit()
+            return redirect(url_for('delete_profile'))
     return render_template('delete.html', title='delete profile', form=login)
