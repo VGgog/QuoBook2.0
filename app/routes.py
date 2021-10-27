@@ -1,7 +1,7 @@
 from app import app, db
 from flask import render_template, flash, redirect, url_for
 import app.forms as forms
-from app.models import Users
+from app.models import Users, Quote
 from app import passwords
 from app import function
 
@@ -46,16 +46,9 @@ def get_token():
     """Страница получения токена"""
     login = forms.LoginForm()
     if login.validate_on_submit():
-        if not Users.query.filter_by(username=login.username.data).first():
-            flash('Такой логин не зарегистрирован.')
+        if function.check_user(login.username.data, login.password.data, 'get_token'):
+            flash(f'Ваш токен: {Users.query.filter_by(username=login.username.data).first().token}')
             return redirect(url_for('get_token'))
-
-        if not function.check_password(login.username.data, login.password.data):
-            flash('Пароль не верный.')
-            return redirect(url_for('get_token'))
-
-        flash(f'Ваш токен: {Users.query.filter_by(username=login.username.data).first().token}')
-        return redirect(url_for('get_token'))
     return render_template('token.html', title='token', form=login)
 
 
@@ -65,8 +58,16 @@ def delete_profile():
     login = forms.DeleteForm()
     if login.validate_on_submit():
         if function.check_user(login.username.data, login.password.data, 'delete_profile'):
-            flash('Профиль удалён.')
-            db.session.delete(Users.query.filter_by(username=login.username.data).first())
+            user = Users.query.filter_by(username=login.username.data).first()
+
+            # Все user_id цитат который добавил этот пользователь, меняются на 1(user_id админа)
+            for user_id in Quote.query.filter_by(user_id=user.user_id):
+                user_id.user_id = 1
+                db.session.commit()
+
+            db.session.delete(user)
             db.session.commit()
+            flash('Профиль удалён.')
             return redirect(url_for('delete_profile'))
+
     return render_template('delete.html', title='delete profile', form=login)
