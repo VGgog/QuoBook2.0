@@ -30,27 +30,34 @@ def check_user(quote_data):
 
 def checking_correctness_json(quote_data):
     """Проверяет правильность отправленного json"""
+    '''
     if 'login' and 'password' and 'quote' in quote_data:
         info_for_quote = quote_data['quote']
         if 'author' and 'book_title' and 'quote' in info_for_quote:
             return True
 
     return False
+    '''
+    if 'token' and 'quote' in quote_data:
+        if 'author' and 'book_title' and 'quote' in quote_data['quote']:
+            return True
+    return False
 
 
 def made_quote_obj(quote_data, quote_id):
     """Возвращает цитату в виде объекта"""
     quote_info = quote_data['quote']
-    user_id = Users.query.filter_by(username=quote_data['login']).first().user_id
+    user_id = Users.query.filter_by(token=quote_data['token']).first().user_id
+
     return Quote(user_id=user_id, quote_id=quote_id,  author=quote_info['author'],
                  book_title=quote_info['book_title'], quote=quote_info['quote'])
 
 
-def check_user_id_and_quote_user_id(quote_data, quote_id):
+def check_user_id_and_quote_user_id(token, quote_id):
     """Проверяет user_id цитаты и user_id логина который отправили в запросе."""
     quote = Quote.query.get_or_404(quote_id)
 
-    if Users.query.filter_by(username=quote_data['login']).first().user_id == quote.user_id:
+    if Users.query.filter_by(token=token).first().user_id == quote.user_id:
         return True
 
     return False
@@ -64,11 +71,9 @@ def checking_correct_json2(quote_data):
     return False
 
 
-def transfer_to_int(integer):
-    """Переводит строку в число"""
-    if integer:
-        try:
-            quote_id = int(integer)
-            return quote_id
-        except ValueError:
-            return None
+def check_token(token):
+    """Проверяет наличие токена в базе данных"""
+    if Users.query.filter_by(token=token).first():
+        return True
+
+    return False
