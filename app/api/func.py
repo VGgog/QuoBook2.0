@@ -30,14 +30,6 @@ def check_user(quote_data):
 
 def checking_correctness_json(quote_data):
     """Проверяет правильность отправленного json"""
-    '''
-    if 'login' and 'password' and 'quote' in quote_data:
-        info_for_quote = quote_data['quote']
-        if 'author' and 'book_title' and 'quote' in info_for_quote:
-            return True
-
-    return False
-    '''
     if 'token' and 'quote' in quote_data:
         if 'author' and 'book_title' and 'quote' in quote_data['quote']:
             return True
@@ -75,5 +67,13 @@ def check_token(token):
     """Проверяет наличие токена в базе данных"""
     if Users.query.filter_by(token=token).first():
         return True
+    return False
+
+
+def check_correctness_json_with_token(quote_data):
+    """Проверяет наличие токена в json и наличие токена в бд"""
+    if 'token' in quote_data:
+        if check_token(quote_data['token']):
+            return True
 
     return False
