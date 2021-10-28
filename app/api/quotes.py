@@ -113,22 +113,21 @@ def changed_pass():
 @bp.route('/new_quote', methods=['POST', 'PUT'])
 def add_new_quote():
     """Добавляет новую цитату или изменяет существующую """
-    quote_id = func.transfer_to_int(request.args.get('quote_id'))
-    quote_data = request.get_json()
+    quote_id = request.args.get('quote_id', type=int) or None
+    quote_data = request.get_json() or {}
 
     if not func.checking_correctness_json(quote_data):
         return "The form of the submitted json is not correct.", 400
-    if not func.check_user(quote_data):
-        return "Login or password is incorrect", 401
+    if not func.check_token(quote_data['token']):
+        return "Token is incorrect", 401
 
     quote_text = quote_data['quote']['quote']
     if Quote.query.filter_by(quote=quote_text).first():
         return "This quote already added.", 404
 
     if quote_id:
-        if not func.check_user_id_and_quote_user_id(quote_data, quote_id):
+        if not func.check_user_id_and_quote_user_id(quote_data['token'], quote_id):
             return "You do not have permission to update this quote.", 403
-
         if Quote.query.filter_by(quote_id=quote_id).first():
             db.session.delete(Quote.query.filter_by(quote_id=quote_id).first())
         quote = func.made_quote_obj(quote_data, quote_id=quote_id)
