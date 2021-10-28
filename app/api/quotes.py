@@ -161,14 +161,12 @@ def delete_user():
 @bp.route('del_quote/<int:quote_id>', methods=['DELETE'])
 def delete_quote(quote_id):
     """Delete-метод, удаляет цитату, если Вы её добавляли."""
-    quote_data = request.get_json()
-    if not func.checking_correct_json2(quote_data):
-        return "The form of the submitted json is not correct.", 400
+    quote_data = request.get_json() or {}
 
-    if not func.check_user(quote_data):
-        return "Login or password is incorrect", 401
+    if not func.check_correctness_json_with_token(quote_data):
+        return "The form or the token of the submitted json is not correct.", 400
 
-    if not func.check_user_id_and_quote_user_id(quote_data, quote_id):
+    if not func.check_user_id_and_quote_user_id(quote_data['token'], quote_id):
         return "You do not have permission to delete this quote.", 403
 
     quote = Quote.query.filter_by(quote_id=quote_id).first()
