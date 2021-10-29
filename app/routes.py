@@ -2,8 +2,7 @@ from app import app, db
 from flask import render_template, flash, redirect, url_for
 import app.forms as forms
 from app.models import Users, Quote
-from app import passwords
-from app import function
+from app import password_token
 
 
 @app.route('/')
@@ -33,7 +32,8 @@ def reg():
             return redirect(url_for('reg'))
 
         user = Users(user_id=Users.query.count() + 1, username=login.username.data,
-                     password_hash=passwords.make_password_hash(login.password.data), token=passwords.generate_token())
+                     password_hash=password_token.make_password_hash(login.password.data),
+                     token=password_token.generate_token())
         db.session.add(user)
         db.session.commit()
         flash('Вы успешно зарегистрировались.')
@@ -50,7 +50,7 @@ def get_token():
             flash('Такой логин не зарегистрирован.')
             return redirect(url_for('get_token'))
 
-        if not passwords.check_password(login.username.data, login.password.data):
+        if not password_token.check_password(login.username.data, login.password.data):
             flash('Пароль не верный.')
             return redirect(url_for('get_token'))
 
@@ -68,7 +68,7 @@ def delete_profile():
             flash('Такой логин не зарегистрирован.')
             return redirect(url_for('delete_profile'))
 
-        if not passwords.check_password(login.username.data, login.password.data):
+        if not password_token.check_password(login.username.data, login.password.data):
             flash('Пароль не верный.')
             return redirect(url_for('delete_profile'))
 
