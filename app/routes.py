@@ -46,9 +46,16 @@ def get_token():
     """Страница получения токена"""
     login = forms.LoginForm()
     if login.validate_on_submit():
-        if function.check_user(login.username.data, login.password.data, 'get_token'):
-            flash(f'Ваш токен: {Users.query.filter_by(username=login.username.data).first().token}')
+        if not Users.query.filter_by(username=login.username.data).first():
+            flash('Такой логин не зарегистрирован.')
             return redirect(url_for('get_token'))
+
+        if not passwords.check_password(login.username.data, login.password.data):
+            flash('Пароль не верный.')
+            return redirect(url_for('get_token'))
+
+        flash(f'Ваш токен: {Users.query.filter_by(username=login.username.data).first().token}')
+        return redirect(url_for('get_token'))
     return render_template('token.html', title='token', form=login)
 
 
@@ -57,17 +64,23 @@ def delete_profile():
     """Страница удаления профиля"""
     login = forms.DeleteForm()
     if login.validate_on_submit():
-        if function.check_user(login.username.data, login.password.data, 'delete_profile'):
-            user = Users.query.filter_by(username=login.username.data).first()
-
-            # Все user_id цитат который добавил этот пользователь, меняются на 1(user_id админа)
-            for user_id in Quote.query.filter_by(user_id=user.user_id):
-                user_id.user_id = 1
-                db.session.commit()
-
-            db.session.delete(user)
-            db.session.commit()
-            flash('Профиль удалён.')
+        if not Users.query.filter_by(username=login.username.data).first():
+            flash('Такой логин не зарегистрирован.')
             return redirect(url_for('delete_profile'))
 
+        if not passwords.check_password(login.username.data, login.password.data):
+            flash('Пароль не верный.')
+            return redirect(url_for('delete_profile'))
+
+        user = Users.query.filter_by(username=login.username.data).first()
+
+        # Все user_id цитат который добавил этот пользователь, меняются на 1(user_id админа)
+        for user_id in Quote.query.filter_by(user_id=user.user_id):
+            user_id.user_id = 1
+            db.session.commit()
+
+        db.session.delete(user)
+        db.session.commit()
+        flash('Профиль удалён.')
+        return redirect(url_for('delete_profile'))
     return render_template('delete.html', title='delete profile', form=login)
