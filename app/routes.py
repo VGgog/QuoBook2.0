@@ -1,5 +1,6 @@
 from app import app, db
 from flask import render_template, flash, redirect, url_for
+from werkzeug.security import generate_password_hash, check_password_hash
 import app.forms as forms
 from app.models import Users, Quote
 from app import password_token
@@ -32,7 +33,7 @@ def reg():
             return redirect(url_for('reg'))
 
         user = Users(user_id=Users.query.count() + 1, username=login.username.data,
-                     password_hash=password_token.make_password_hash(login.password.data),
+                     password_hash=generate_password_hash(login.password.data),
                      token=password_token.generate_token())
         db.session.add(user)
         db.session.commit()
@@ -50,7 +51,8 @@ def get_token():
             flash('Такой логин не зарегистрирован.')
             return redirect(url_for('get_token'))
 
-        if not password_token.check_password(login.username.data, login.password.data):
+        if not check_password_hash(Users.query.filter_by(username=login.username.data).first().password_hash,
+                                   login.password.data):
             flash('Пароль не верный.')
             return redirect(url_for('get_token'))
 
@@ -68,7 +70,8 @@ def delete_profile():
             flash('Такой логин не зарегистрирован.')
             return redirect(url_for('delete_profile'))
 
-        if not password_token.check_password(login.username.data, login.password.data):
+        if not check_password_hash(Users.query.filter_by(username=login.username.data).first().password_hash,
+                                   login.password.data):
             flash('Пароль не верный.')
             return redirect(url_for('delete_profile'))
 
