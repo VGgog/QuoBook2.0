@@ -1,9 +1,10 @@
 from app.api import bp
 from flask import jsonify, request
 from app.models import Quote, Users
-from app import db, password_token
+from app import db
 from app.api import func
 from random import randrange, choice
+from werkzeug.security import generate_password_hash
 
 
 @bp.route('/quote/<int:quote_id>', methods=['GET'])
@@ -85,7 +86,7 @@ def registration_new_user():
         return "A user with this username already exists", 401
 
     user = Users(user_id=Users.query.count() + 1, username=quote_data['login'],
-                 password_hash=password_token.make_password_hash(quote_data['password']))
+                 password_hash=generate_password_hash(quote_data['password']))
     db.session.add(user)
     db.session.commit()
     return "You have successful registered", 200
@@ -105,7 +106,7 @@ def changed_pass():
         return "This login not found", 404
 
     user = Users.query.filter_by(username=quote_data['login']).first()
-    user.password_hash = password_token.make_password_hash(quote_data['new_password'])
+    user.password_hash = generate_password_hash(quote_data['new_password'])
     db.session.commit()
     return "You have successful changed password", 200
 
