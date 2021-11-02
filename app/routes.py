@@ -3,7 +3,7 @@ from flask import render_template, flash, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 import app.forms as forms
 from app.models import Users, Quote
-from app import password_token
+from app import generate_token
 
 
 @app.route('/')
@@ -34,7 +34,7 @@ def reg():
 
         user = Users(user_id=Users.query.count() + 1, username=login.username.data,
                      password_hash=generate_password_hash(login.password.data),
-                     token=password_token.generate_token())
+                     token=generate_token.generate_token())
         db.session.add(user)
         db.session.commit()
         flash('Вы успешно зарегистрировались.')
