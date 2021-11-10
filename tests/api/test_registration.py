@@ -15,7 +15,7 @@ class AppTestCase(unittest.TestCase):
         self.tester = app.test_client()
         app.config['TESTING'] = True
         app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:fqlfh2004@localhost:5432/QuoBookTest"
-        
+
         # Добавляет пользователя в бд, для проведения теста в методе test_login_in_exists()
         db.session.add(Users(user_id=1, username='monoliza', password_hash=generate_password_hash('igrauchu')))
         db.create_all()
