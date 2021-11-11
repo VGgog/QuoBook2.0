@@ -32,4 +32,4 @@ def correct_form_sent_json(quote_data):
 
 def login_and_password_in_sent_json(quote_data):
     """Проверяет наличие нужных полей в отправленном json-файле"""
-    return 'login' and 'password' in quote_data
+    return 'login' in quote_data and 'password' in quote_data
