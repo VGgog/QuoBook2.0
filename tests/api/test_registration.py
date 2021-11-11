@@ -5,8 +5,7 @@ import unittest
 import json
 
 '''
-Тестирование функции регистрации пользователя по api
-Тестируется функция registration_new_user() в модуле quotes 
+Тестирование функции registration_new_user() 
 '''
 
 
