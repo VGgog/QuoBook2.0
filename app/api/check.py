@@ -27,7 +27,9 @@ def user_login_and_password(quote_data):
 
 def correct_form_sent_json(quote_data):
     """Проверяет правильность отправленного json"""
-    return ('token' and 'quote' in quote_data) and ('author' and 'book_title' and 'quote' in quote_data['quote'])
+    return ('token' in quote_data) and ('quote' in quote_data) and (('author' in quote_data['quote'])
+                                                                    and ('book_title' in quote_data['quote'])
+                                                                    and ('quote' in quote_data['quote']))
 
 
 def login_and_password_in_sent_json(quote_data):
