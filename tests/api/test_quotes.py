@@ -198,3 +198,64 @@ class AddOrChangeQuoteTest(unittest.TestCase):
                                     content_type='application/json')
         self.assertEqual(response.status_code, 400)
         self.assertEqual('The form of the submitted json is not correct.', response.get_data(as_text=True))
+
+
+class DelQuoteTestCase(unittest.TestCase):
+    def setUp(self):
+        self.tester = app.test_client()
+        app.config['TESTING'] = True
+        app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:fqlfh2004@localhost:5432/QuoBookTest"
+
+        quote3 = Quote(user_id=1, quote_id=3,
+                       author='Эрих Мария Ремарк', book_title='Ночь в Лиссабоне',
+                       quote='Она еще не сдалась, но уже не боролась.')
+        db.session.add(quote3)
+        db.session.add(Users(user_id=1, username='monoliza', password_hash=generate_password_hash('igrauchu'),
+                             token='sfgasgasgasgdasgf'))
+        db.session.add(Users(user_id=2, username='monoliza45', password_hash=generate_password_hash('igrauchu123'),
+                             token='dsgsdfdsfs'))
+        db.create_all()
+
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+
+    def test_successful_del_quote(self):
+        response = self.tester.delete('/api/del_quote/3', data=json.dumps({'token': 'sfgasgasgasgdasgf'}),
+                                      content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        json_response = json.loads(response.get_data(as_text=True))
+        self.assertIn('user_id', json_response)
+        self.assertIn('quote_id', json_response)
+        self.assertIn('quote', json_response)
+        self.assertIn('author', json_response['quote'])
+        self.assertIn('book_title', json_response['quote'])
+        self.assertIn('quote', json_response['quote'])
+
+    def test_del_quote_error(self):
+        response = self.tester.delete('/api/del_quote/3')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual('The form or the token of the submitted json is not correct.', response.get_data(as_text=True))
+
+    def test_del_quote_error2(self):
+        response = self.tester.delete('/api/del_quote/3', data=json.dumps({'token': 'csvlv jsjgkgjsld'}),
+                                      content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual('The form or the token of the submitted json is not correct.', response.get_data(as_text=True))
+
+    def test_del_quote_error3(self):
+        response = self.tester.delete('/api/del_quote/3', data=json.dumps({'token': 'dsgsdfdsfs'}),
+                                      content_type='application/json')
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual('You do not have permission to delete this quote.', response.get_data(as_text=True))
+
+    def test_del_quote_error4(self):
+        response = self.tester.delete('/api/del_quote/3', data=json.dumps({'author': 'dsgsdfdsfs'}),
+                                      content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual('The form or the token of the submitted json is not correct.', response.get_data(as_text=True))
+
+    def test_del_quote_error5(self):
+        response = self.tester.delete('/api/del_quote/fg', data=json.dumps({'token': 'dsgsdfdsfs'}),
+                                      content_type='application/json')
+        self.assertEqual(response.status_code, 404)
