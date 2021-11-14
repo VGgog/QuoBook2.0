@@ -25,6 +25,11 @@ class AppTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn("token", response.get_data(as_text=True))
 
+    def test_error(self):
+        response = self.tester.post('/api/authentication')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual("The form of the submitted json is not correct.", response.get_data(as_text=True))
+
     def test_error1(self):
         response = self.tester.post('/api/authentication', data=json.dumps({
             'login': 'monoliza'}), content_type='application/json')

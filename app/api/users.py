@@ -9,25 +9,25 @@ from app import db
 
 @bp.route('/registration', methods=['POST'])
 def registration_new_user():
-    """Регистрация нового пользователя"""
-    quote_data = request.get_json() or {}
-    if not check.login_and_password_in_sent_json(quote_data):
+    """Регистрация нового пользователя, возвращает словарь {"token": <Токен>}"""
+    user_data = request.get_json() or {}
+    if not check.login_and_password_in_sent_json(user_data):
         return "The form of the submitted json is not correct.", 400
 
-    if Users.query.filter_by(username=quote_data['login']).first():
+    if Users.query.filter_by(username=user_data['login']).first():
         return "A user with this username already exists", 401
 
-    user = Users(user_id=Users.query.count() + 1, username=quote_data['login'],
-                 password_hash=generate_password_hash(quote_data['password']), token=generate_token.generate_token())
+    user = Users(user_id=Users.query.count() + 1, username=user_data['login'],
+                 password_hash=generate_password_hash(user_data['password']), token=generate_token.generate_token())
     db.session.add(user)
     db.session.commit()
-    return user.token, 200
+    return jsonify({"token": user.token}), 200
 
 
 @bp.route('/authentication', methods=['POST'])
 def user_authentication():
     """Авторизация пользователя, возвращает словарь {"token": <Токен>}"""
-    user_data = request.get_json()
+    user_data = request.get_json() or {}
     if not check.login_and_password_in_sent_json(user_data):
         return "The form of the submitted json is not correct.", 400
 

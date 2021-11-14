@@ -4,10 +4,6 @@ from app import app, db
 import unittest
 import json
 
-'''
-Тестирование функции registration_new_user() 
-'''
-
 
 class AppTestCase(unittest.TestCase):
     def setUp(self):
@@ -28,7 +24,7 @@ class AppTestCase(unittest.TestCase):
         response = self.tester.post('/api/registration', data=json.dumps({
             'login': 'papatola', 'password': 'pororo'}), content_type='application/json')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(Users.query.filter_by(username='papatola').first().token, response.get_data(as_text=True))
+        self.assertIn("token", response.get_data(as_text=True))
         user_data = Users.query.filter_by(username='papatola').first()
         self.assertEqual(user_data.username, 'papatola')
         self.assertTrue(check_password_hash(user_data.password_hash, 'pororo'))
