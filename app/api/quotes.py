@@ -114,13 +114,13 @@ def add_new_quote():
 
 @bp.route('del_quote/<int:quote_id>', methods=['DELETE'])
 def delete_quote(quote_id):
-    """Delete-метод, удаляет цитату, если Вы её добавляли."""
-    quote_data = request.get_json() or {}
+    """Удаляет цитату, если Вы её добавляли."""
+    token_data = request.get_json() or {}
 
-    if not (check.token_in_json(quote_data) and check.token_in_db(quote_data['token'])):
+    if not (check.token_in_json(token_data) and check.token_in_db(token_data['token'])):
         return "The form or the token of the submitted json is not correct.", 400
 
-    if not check.user_and_quote_user_id(quote_data['token'], quote_id):
+    if not check.user_and_quote_user_id(token_data['token'], quote_id):
         return "You do not have permission to delete this quote.", 403
 
     quote = Quote.query.filter_by(quote_id=quote_id).first()
