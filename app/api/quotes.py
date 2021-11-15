@@ -7,20 +7,20 @@ from app import db
 
 
 @bp.route('/quote', methods=['GET'])
-def send_quote():
-    """Возвращает случайную цитату"""
-    return jsonify(quote_management.return_dict_quote_info(Quote.query.get_or_404(randrange(Quote.query.count()))))
+def send_a_random_quote():
+    """Отправляет случайную цитату"""
+    return jsonify(quote_management.return_dict_quote_info(Quote.query.get_or_404(randrange(1, Quote.query.count()))))
 
 
 @bp.route('/quote/<int:quote_id>', methods=['GET'])
-def send_quotes_on_quote_id(quote_id):
-    """Возвращает цитату по id цитаты"""
+def send_quote_on_quote_id(quote_id):
+    """Отправляет цитату по id цитаты"""
     return jsonify(quote_management.return_dict_quote_info(Quote.query.get_or_404(quote_id)))
 
 
 @bp.route('/quote/<string:author_or_book_title>', methods=['GET'])
-def send_quotes_on_author_or_book_title(author_or_book_title):
-    """Возвращает цитату по автору или названию книги"""
+def send_quote_on_author_or_book_title(author_or_book_title):
+    """Отправляет цитату отфильтрованную по автору или названию книги"""
     if Quote.query.filter_by(author=author_or_book_title).first():
         return jsonify(quote_management.return_dict_quote_info(Quote.query.filter_by(
             author=author_or_book_title).first()))
@@ -33,8 +33,8 @@ def send_quotes_on_author_or_book_title(author_or_book_title):
 
 
 @bp.route('/quote/<string:author>/<string:book_title>', methods=['GET'])
-def send_quotes_author_and_book_title(author, book_title):
-    """Фильтрует цитаты по автору и названию книги, и возвращает случайную цитату"""
+def send_quote_author_and_book_title(author, book_title):
+    """Сортирует цитаты по автору и названию книги, и отправляет случайную цитату из отсортированных"""
     quotes = []
     for quote in Quote.query.filter_by(author=author):
         if quote.book_title == book_title:
@@ -48,7 +48,7 @@ def send_quotes_author_and_book_title(author, book_title):
 
 @bp.route('/quotes/<int:count>', methods=['GET'])
 def send_give_count_quotes(count):
-    """Возвращает случайные цитаты в заданном количестве"""
+    """Отправляет случайные цитаты в заданном количестве"""
     quotes = []
     quotes_id = []
     i = 0
@@ -59,6 +59,8 @@ def send_give_count_quotes(count):
             quotes_id.append(quote_id)
             i += 1
 
+        # Если пользователь задаст количество цитат большее чем имеется в бд, то цикл станет бесконечным.
+        # Во избежание этого добавлен этот if.
         if len(quotes_id) == Quote.query.count():
             break
     return jsonify(quotes), 200
