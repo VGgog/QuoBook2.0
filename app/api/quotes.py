@@ -6,6 +6,12 @@ from app.api import bp
 from app import db
 
 
+@bp.route('/quote', methods=['GET'])
+def send_quote():
+    """Возвращает случайную цитату"""
+    return jsonify(quote_management.return_dict_quote_info(Quote.query.get_or_404(randrange(Quote.query.count()))))
+
+
 @bp.route('/quote/<int:quote_id>', methods=['GET'])
 def send_quotes_on_quote_id(quote_id):
     """Возвращает цитату по id цитаты"""
