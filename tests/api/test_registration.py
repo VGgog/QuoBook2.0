@@ -1,3 +1,4 @@
+from tests.config import TEST_SQLALCHEMY_DATABASE_URI
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.models import Users
 from app import app, db
@@ -9,7 +10,7 @@ class AppTestCase(unittest.TestCase):
     def setUp(self):
         self.tester = app.test_client()
         app.config['TESTING'] = True
-        app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:fqlfh2004@localhost:5432/QuoBookTest"
+        app.config['SQLALCHEMY_DATABASE_URI'] = TEST_SQLALCHEMY_DATABASE_URI
 
         # Добавляет пользователя в бд, для проведения теста в методе test_login_in_exists()
         db.session.add(Users(user_id=1, username='monoliza', password_hash=generate_password_hash('igrauchu')))
