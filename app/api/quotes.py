@@ -68,13 +68,13 @@ def send_give_count_quotes(count):
 
 @bp.route('/all_quotes', methods=['POST'])
 def send_all_quote_id_which_add_user():
-    """Возвращает id всех цитат, добавленных пользователем"""
-    quote_data = request.get_json() or {}
+    """Отправляет id всех цитат, добавленных пользователем"""
+    token_data = request.get_json() or {}
     quotes_id = []
-    if not (check.token_in_json(quote_data) and check.token_in_db(quote_data['token'])):
+    if not (check.token_in_json(token_data) and check.token_in_db(token_data['token'])):
         return "The form of the submitted json is not correct.", 400
 
-    for quote in Quote.query.filter_by(user_id=Users.query.filter_by(token=quote_data['token']).first().user_id):
+    for quote in Quote.query.filter_by(user_id=Users.query.filter_by(token=token_data['token']).first().user_id):
         quotes_id.append({'quote_id': quote.quote_id})
 
     if quotes_id:
