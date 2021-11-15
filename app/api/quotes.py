@@ -82,10 +82,9 @@ def send_all_quote_id_which_add_user():
     return 'You not add quotes', 404
 
 
-@bp.route('/new_quote', methods=['POST', 'PUT'])
+@bp.route('/new_quote', methods=['POST'])
 def add_new_quote():
-    """Добавляет новую цитату или изменяет существующую """
-    quote_id = request.args.get('quote_id', type=int) or None
+    """Добавляет новую цитату"""
     quote_data = request.get_json() or {}
 
     if not check.correct_form_sent_json(quote_data):
@@ -97,19 +96,9 @@ def add_new_quote():
     if Quote.query.filter_by(quote=quote_text).first():
         return "This quote already added.", 404
 
-    if quote_id:
-        if not check.user_and_quote_user_id(quote_data['token'], quote_id):
-            return "You do not have permission to update this quote.", 403
-        if Quote.query.filter_by(quote_id=quote_id).first():
-            db.session.delete(Quote.query.filter_by(quote_id=quote_id).first())
-        quote = quote_management.creates_a_quote_object(quote_data, quote_id=quote_id)
-    else:
-        quote = quote_management.creates_a_quote_object(quote_data, quote_id=Quote.query.count() + 1)
-
-    db.session.add(quote)
+    db.session.add(quote_management.creates_a_quote_object(quote_data, quote_id=Quote.query.count() + 1))
     db.session.commit()
-    return jsonify(quote_management.return_dict_quote_info(
-        Quote.query.filter_by(quote=quote_text).first())), 200
+    return jsonify(quote_management.return_dict_quote_info(Quote.query.filter_by(quote=quote_text).first())), 200
 
 
 @bp.route('del_quote/<int:quote_id>', methods=['DELETE'])
