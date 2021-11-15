@@ -9,7 +9,43 @@ import json
 """
 
 
-class SentQuoteTestCase(unittest.TestCase):
+class SendQuotesTestCase(unittest.TestCase):
+    def setUp(self):
+        self.tester = app.test_client()
+        app.config['TESTING'] = True
+        app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:fqlfh2004@localhost:5432/QuoBookTest"
+
+        quote = Quote(user_id=1, quote_id=1,
+                      author='Рэй Брэдбери', book_title='Вино из одуванчиков',
+                      quote='Что хочешь помнить, то всегда помнишь.')
+        db.session.add(quote)
+        quote2 = Quote(user_id=1, quote_id=2,
+                       author='Л.Н.Толстой', book_title='Война и мир', quote='Навсегда ничего не бывает.')
+        db.session.add(quote2)
+        quote3 = Quote(user_id=1, quote_id=3,
+                       author='Эрих Мария Ремарк', book_title='Ночь в Лиссабоне',
+                       quote='Она еще не сдалась, но уже не боролась.')
+        db.session.add(quote3)
+        db.create_all()
+    
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+    
+    def test_successful_send_quotes_on_quote_id(self):
+        """Тестирование функции send_quotes_on_quote_id()"""
+        response = self.tester.get('/api/quote')
+        self.assertEqual(response.status_code, 200)
+        json_response = json.loads(response.get_data(as_text=True))
+        self.assertIn('user_id', json_response)
+        self.assertIn('quote_id', json_response)
+        self.assertIn('quote', json_response)
+        self.assertIn('author', json_response['quote'])
+        self.assertIn('book_title', json_response['quote'])
+        self.assertIn('quote', json_response['quote'])
+
+
+class SendQuoteOnQuoteIdTestCase(unittest.TestCase):
     def setUp(self):
         self.tester = app.test_client()
         app.config['TESTING'] = True
