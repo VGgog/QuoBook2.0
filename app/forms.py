@@ -5,9 +5,9 @@ from wtforms.validators import DataRequired, Email, EqualTo
 
 class LoginForm(FlaskForm):
     """Форма аутентификации пользователя"""
-    username = StringField('username', validators=[DataRequired()])
-    password = PasswordField('password', validators=[DataRequired()])
-    submit = SubmitField('get a token')
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Token')
 
 
 class DeleteForm(FlaskForm):

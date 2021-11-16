@@ -4,7 +4,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import app.forms as forms
 from app.models import Users, Quote
 from app import generate_token
-from wtforms.validators import ValidationError
 
 
 @app.route('/')
@@ -44,16 +43,16 @@ def get_token():
     """Страница получения токена"""
     login = forms.LoginForm()
     if login.validate_on_submit():
-        if not Users.query.filter_by(email=login.username.data).first():
-            flash('Такой логин не зарегистрирован.')
+        if not Users.query.filter_by(email=login.email.data).first():
+            flash('Вы не зарегистрированы.')
             return redirect(url_for('get_token'))
 
-        if not check_password_hash(Users.query.filter_by(email=login.username.data).first().password_hash,
+        if not check_password_hash(Users.query.filter_by(email=login.email.data).first().password_hash,
                                    login.password.data):
             flash('Пароль не верный.')
             return redirect(url_for('get_token'))
 
-        flash(f'Ваш токен: {Users.query.filter_by(email=login.username.data).first().token}')
+        flash(f'Ваш токен: {Users.query.filter_by(email=login.email.data).first().token}')
         return redirect(url_for('get_token'))
     return render_template('token.html', title='token', form=login)
 
