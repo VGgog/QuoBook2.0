@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Email, EqualTo
 
 
 class LoginForm(FlaskForm):
@@ -19,8 +19,7 @@ class DeleteForm(FlaskForm):
 
 class RegistrationForm(FlaskForm):
     """Форма регистрации нового пользователя"""
-    username = StringField('username', validators=[DataRequired()])
-    password = PasswordField('password', validators=[DataRequired()])
-    password2 = PasswordField('repeat password', validators=[DataRequired()])
-    submit = SubmitField('sign In')
-
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    password2 = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Sign In')

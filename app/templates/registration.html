@@ -5,10 +5,10 @@
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
         <p>
-            {{ form.username.label }}<br>
-            {{ form.username(size=32) }}<br>
-            {% for error in form.username.errors %}
-            <span style="color: red;">{{'Это поле должно быть заполнено.'}}</span>
+            {{ form.email.label }}<br>
+            {{ form.email(size=32) }}<br>
+            {% for error in form.email.errors %}
+            <span style="color: red;">{{'Укажите правильный email-адрес'}}</span>
             {% endfor %}
         </p>
         <p>
@@ -22,7 +22,7 @@
             {{ form.password2.label }}<br>
             {{ form.password2(size=32) }}<br>
             {% for error in form.password2.errors %}
-            <span style="color: red;">{{'Это поле должно быть заполнено.'}}</span>
+            <span style="color: red;">{{'Пароли не совпадают'}}</span>
             {% endfor %}
         </p>
         <p>{{ form.submit() }}</p>
