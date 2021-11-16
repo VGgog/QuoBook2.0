@@ -2,7 +2,7 @@ from app import app, db
 from flask import render_template, flash, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 import app.forms as forms
-from app.models import Users, Quote
+from app.models import Users
 from app import generate_token
 
 
@@ -55,31 +55,3 @@ def get_token():
         flash(f'Ваш токен: {Users.query.filter_by(email=login.email.data).first().token}')
         return redirect(url_for('get_token'))
     return render_template('token.html', title='token', form=login)
-
-
-@app.route('/delete_profile', methods=['GET', 'POST'])
-def delete_profile():
-    """Страница удаления профиля"""
-    login = forms.DeleteForm()
-    if login.validate_on_submit():
-        if not Users.query.filter_by(email=login.username.data).first():
-            flash('Такой логин не зарегистрирован.')
-            return redirect(url_for('delete_profile'))
-
-        if not check_password_hash(Users.query.filter_by(email=login.username.data).first().password_hash,
-                                   login.password.data):
-            flash('Пароль не верный.')
-            return redirect(url_for('delete_profile'))
-
-        user = Users.query.filter_by(email=login.username.data).first()
-
-        # Все user_id цитат который добавил этот пользователь, меняются на 1(user_id админа)
-        for user_id in Quote.query.filter_by(user_id=user.user_id):
-            user_id.user_id = 1
-            db.session.commit()
-
-        db.session.delete(user)
-        db.session.commit()
-        flash('Профиль удалён.')
-        return redirect(url_for('delete_profile'))
-    return render_template('delete.html', title='delete profile', form=login)
