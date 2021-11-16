@@ -1,4 +1,4 @@
-from tests.config import TEST_SQLALCHEMY_DATABASE_URI
+from tests.test_db_config import TEST_SQLALCHEMY_DATABASE_URI
 from app.models import Quote
 from app import app, db
 import unittest

@@ -1,4 +1,4 @@
-from tests.config import TEST_SQLALCHEMY_DATABASE_URI
+from tests.test_db_config import TEST_SQLALCHEMY_DATABASE_URI
 from werkzeug.security import generate_password_hash
 from app.models import Quote, Users
 from app import app, db

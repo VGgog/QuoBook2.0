@@ -1,4 +1,4 @@
-from tests.config import TEST_SQLALCHEMY_DATABASE_URI
+from tests.test_db_config import TEST_SQLALCHEMY_DATABASE_URI
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.models import Users
 from app import app, db
@@ -13,7 +13,7 @@ class AppTestCase(unittest.TestCase):
         app.config['SQLALCHEMY_DATABASE_URI'] = TEST_SQLALCHEMY_DATABASE_URI
 
         # Добавляет пользователя в бд, для проведения теста в методе test_login_in_exists()
-        db.session.add(Users(user_id=1, username='monoliza', password_hash=generate_password_hash('igrauchu')))
+        db.session.add(Users(user_id=1, email='monoliza', password_hash=generate_password_hash('igrauchu')))
         db.create_all()
 
     def tearDown(self):
@@ -26,8 +26,8 @@ class AppTestCase(unittest.TestCase):
             'login': 'papatola', 'password': 'pororo'}), content_type='application/json')
         self.assertEqual(response.status_code, 200)
         self.assertIn("token", response.get_data(as_text=True))
-        user_data = Users.query.filter_by(username='papatola').first()
-        self.assertEqual(user_data.username, 'papatola')
+        user_data = Users.query.filter_by(email='papatola').first()
+        self.assertEqual(user_data.email, 'papatola')
         self.assertTrue(check_password_hash(user_data.password_hash, 'pororo'))
 
     def test_json_without_login(self):
