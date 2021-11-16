@@ -19,8 +19,8 @@ def token_in_json(quote_data):
 
 def user_login_and_password(quote_data):
     """Производит проверку, зарегистрирован ли пользователь, и правильность введённого пароля"""
-    if Users.query.filter_by(username=quote_data['login']).first():
-        return check_password_hash(Users.query.filter_by(username=quote_data['login']).first().password_hash,
+    if Users.query.filter_by(email=quote_data['login']).first():
+        return check_password_hash(Users.query.filter_by(email=quote_data['login']).first().password_hash,
                                    quote_data['password'])
     return False
 
