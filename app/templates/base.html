@@ -7,13 +7,13 @@
 </head>
 <body>
 <h1>QuoBook</h1>
-<div class="sidebar">
-    <header>Содержание</header>
-    <ul>
+<div class="header_links">
+    <ul id="links">
         <li><a href="{{ url_for('home') }}">Home</a></li>
-        <li><a href="{{ url_for('docs') }}">Documentation</a></li>
-        <li><a href="{{ url_for('get_token') }}">Token</a></li>
-        <li><a href="https://github.com/VGgog/QuoBook2.0">GitHub</a></li>
+        <li><a href="{{ url_for('get_a_quote') }}">Цитата</a></li>
+        <li><a href="{{ url_for('add_quote') }}">Добавить цитату</a></li>
+        <li><a href="{{ url_for('docs') }}">API</a></li>
+        <li><a href="{{ url_for('get_token') }}">Войти</a></li>
     </ul>
 </div>
 <div class="content">

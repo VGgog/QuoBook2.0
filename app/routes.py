@@ -55,3 +55,15 @@ def get_token():
         flash(f'Ваш токен: {Users.query.filter_by(email=login.email.data).first().token}')
         return redirect(url_for('get_token'))
     return render_template('token.html', title='token', form=login)
+
+
+@app.route('/quote')
+def get_a_quote():
+    """Возвращает страницу home"""
+    return render_template('get_quote.html', title='Home')
+
+
+@app.route('/add_quote')
+def add_quote():Я
+    """Возвращает страницу с документацией"""
+    return render_template('add_quote.html', title='Documentation')
