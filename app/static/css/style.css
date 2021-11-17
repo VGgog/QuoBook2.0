@@ -18,37 +18,35 @@ body{
 h1{
 	text-align: center;
 	font-size: 50px;
-	height: 100px;
+	height: 85px;
 	background: #DCDCDC;
 	line-height: 2em;
 }
+.header_links{
+	height: 40px;
+	position: fixed;
+	text-align: center;
+	background: #D3D3D3;
+  width: 100%;
+
+}
+ul#links li{
+	display: inline-block;
+  padding: 0px 25px;
+  color: black;
+  margin: auto;
+  text-align: center;
+  line-height: 2.5em;
+}
 .content{
 	position: fixed;
-	margin-right: 20%;
-	margin-left: 30%;
+	margin-right: 25%;
+	margin-left: 25%;
 	right: 0;
 	width: 50%;
 	height: 100%;
 	line-height: 70px;
-	margin-top: 20px;
-	background: 	#ffffff;
-	border-radius: 5px;
-}
-.sidebar{
-	text-align: center;
-	position: fixed;
-	margin-left: 15%;
-	margin-top: 20px;
-	left: 0;
-	width: 15%;
-	height: 300px;
+	margin-top: 70px;
 	background: #ffffff;
-}
-.sidebar ul a{
-	font-size: 16px;
-	line-height: 2;
-}
-.sidebar header{
-	font-size: 22px;
-	line-height: 70px;
+	text-align: center;
 }
