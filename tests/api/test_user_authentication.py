@@ -12,7 +12,7 @@ class AppTestCase(unittest.TestCase):
         self.tester = app.test_client()
         app.config['TESTING'] = True
         app.config['SQLALCHEMY_DATABASE_URI'] = TEST_SQLALCHEMY_DATABASE_URI
-        db.session.add(Users(user_id=1, email='monoliza', password_hash=generate_password_hash('igrauchu'),
+        db.session.add(Users(user_id=1, email='monoliza@google.com', password_hash=generate_password_hash('igrauchu'),
                              token=generate_token.generate_token()))
         db.create_all()
 
@@ -22,7 +22,7 @@ class AppTestCase(unittest.TestCase):
 
     def test_successful(self):
         response = self.tester.post('/api/authentication', data=json.dumps({
-            'login': 'monoliza', 'password': 'igrauchu'}), content_type='application/json')
+            'email': 'monoliza@google.com', 'password': 'igrauchu'}), content_type='application/json')
         self.assertEqual(response.status_code, 200)
         self.assertIn("token", response.get_data(as_text=True))
 
@@ -33,7 +33,7 @@ class AppTestCase(unittest.TestCase):
 
     def test_error1(self):
         response = self.tester.post('/api/authentication', data=json.dumps({
-            'login': 'monoliza'}), content_type='application/json')
+            'email': 'monoliza@google.com'}), content_type='application/json')
         self.assertEqual(response.status_code, 400)
         self.assertEqual("The form of the submitted json is not correct.", response.get_data(as_text=True))
 
@@ -45,15 +45,15 @@ class AppTestCase(unittest.TestCase):
 
     def test_error3(self):
         response = self.tester.post('/api/authentication', data=json.dumps({
-            'login': 'igoryan', 'password': 'igrauchu'}), content_type='application/json')
+            'email': 'igoryan@ghjdf.ru', 'password': 'igrauchu'}), content_type='application/json')
         self.assertEqual(response.status_code, 404)
-        self.assertEqual("This login not found", response.get_data(as_text=True))
+        self.assertEqual("This email not found", response.get_data(as_text=True))
 
     def test_error4(self):
         response = self.tester.post('/api/authentication', data=json.dumps({
-            'login': 'monoliza', 'password': 'igrauchu345'}), content_type='application/json')
+            'email': 'monoliza@google.com', 'password': 'igrauchu345'}), content_type='application/json')
         self.assertEqual(response.status_code, 401)
-        self.assertEqual("Login or password is incorrect", response.get_data(as_text=True))
+        self.assertEqual("Email or password is incorrect", response.get_data(as_text=True))
 
 
 if __name__ == '__main__':

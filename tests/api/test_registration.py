@@ -13,7 +13,7 @@ class AppTestCase(unittest.TestCase):
         app.config['SQLALCHEMY_DATABASE_URI'] = TEST_SQLALCHEMY_DATABASE_URI
 
         # Добавляет пользователя в бд, для проведения теста в методе test_login_in_exists()
-        db.session.add(Users(user_id=1, email='monoliza', password_hash=generate_password_hash('igrauchu')))
+        db.session.add(Users(user_id=1, email='monoliza@google.com', password_hash=generate_password_hash('igrauchu')))
         db.create_all()
 
     def tearDown(self):
@@ -23,11 +23,11 @@ class AppTestCase(unittest.TestCase):
     def test_successful(self):
         """Успешная регистрация"""
         response = self.tester.post('/api/registration', data=json.dumps({
-            'login': 'papatola', 'password': 'pororo'}), content_type='application/json')
+            'email': 'liza@google.com', 'password': 'pororo'}), content_type='application/json')
         self.assertEqual(response.status_code, 200)
         self.assertIn("token", response.get_data(as_text=True))
-        user_data = Users.query.filter_by(email='papatola').first()
-        self.assertEqual(user_data.email, 'papatola')
+        user_data = Users.query.filter_by(email='liza@google.com').first()
+        self.assertEqual(user_data.email, 'liza@google.com')
         self.assertTrue(check_password_hash(user_data.password_hash, 'pororo'))
 
     def test_json_without_login(self):
@@ -40,14 +40,14 @@ class AppTestCase(unittest.TestCase):
     def test_json_without_password(self):
         """Отправленный json без пароля"""
         response = self.tester.post('/api/registration', data=json.dumps({
-            'login': 'papatola'}), content_type='application/json')
+            'email': 'papatola@moi.ru'}), content_type='application/json')
         self.assertEqual(response.status_code, 400)
         self.assertEqual('The form of the submitted json is not correct.', response.get_data(as_text=True))
 
     def test_login_in_exists(self):
         """Проверяет поведение программы, если login уже есть в бд"""
         response = self.tester.post('/api/registration', data=json.dumps({
-            'login': 'monoliza', 'password': 'igrauchu'}), content_type='application/json')
+            'email': 'monoliza@google.com', 'password': 'igrauchu'}), content_type='application/json')
         self.assertEqual(response.status_code, 401)
         self.assertEqual('A user with this username already exists', response.get_data(as_text=True))
 
@@ -56,6 +56,13 @@ class AppTestCase(unittest.TestCase):
         response = self.tester.post('/api/registration')
         self.assertEqual(response.status_code, 400)
         self.assertEqual('The form of the submitted json is not correct.', response.get_data(as_text=True))
+
+    def test_email_not_correct(self):
+        """Email отправлен неправильно"""
+        response = self.tester.post('/api/registration', data=json.dumps({
+            'email': 'monoliza', 'password': 'igrauchu'}), content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual('Please write right email', response.get_data(as_text=True))
 
 
 if __name__ == '__main__':
