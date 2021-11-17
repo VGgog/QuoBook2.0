@@ -34,11 +34,11 @@ def reg():
         db.session.add(user)
         db.session.commit()
         flash('Вы успешно зарегистрировались.')
-        return redirect(url_for('get_token'))
+        return render_template('after_login.html')
     return render_template('registration.html', title='registration', form=login)
 
 
-@app.route('/token', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def get_token():
     """Страница получения токена"""
     login = forms.LoginForm()
@@ -52,8 +52,8 @@ def get_token():
             flash('Пароль не верный.')
             return redirect(url_for('get_token'))
 
-        flash(f'Ваш токен: {Users.query.filter_by(email=login.email.data).first().token}')
-        return redirect(url_for('get_token'))
+        # flash(f'Ваш токен: {Users.query.filter_by(email=login.email.data).first().token}')
+        return render_template('after_login.html')
     return render_template('token.html', title='token', form=login)
 
 
@@ -64,6 +64,6 @@ def get_a_quote():
 
 
 @app.route('/add_quote')
-def add_quote():Я
+def add_quote():
     """Возвращает страницу с документацией"""
     return render_template('add_quote.html', title='Documentation')
