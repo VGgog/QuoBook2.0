@@ -1,10 +1,11 @@
 from app import app, db
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.urls import url_parse
 import app.forms as forms
 from app.models import Users
 from app import generate_token
-from flask_login import logout_user, login_user, current_user
+from flask_login import logout_user, login_user, current_user, login_required
 
 
 @app.route('/')
@@ -61,7 +62,10 @@ def get_token():
 
         # flash(f'Ваш токен: {Users.query.filter_by(email=login.email.data).first().token}')
         login_user(user, remember=login.remember_me.data)
-        return render_template('after_login.html')
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            return render_template('after_login.html')
+        return redirect(next_page)
     return render_template('token.html', title='token', form=login)
 
 
@@ -72,6 +76,7 @@ def get_a_quote():
 
 
 @app.route('/add_quote')
+@login_required
 def add_quote():
     """Возвращает страницу добавления токена"""
     return render_template('add_quote.html', title='Documentation')
@@ -81,4 +86,5 @@ def add_quote():
 def logout():
     """Страница выхода"""
     logout_user()
+    flash('Вы вышли из системы.')
     return redirect(url_for('get_token'))
