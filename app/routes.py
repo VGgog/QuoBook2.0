@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import app.forms as forms
 from app.models import Users
 from app import generate_token
+from flask_login import logout_user, login_user, current_user
 
 
 @app.route('/')
@@ -22,28 +23,34 @@ def docs():
 @app.route('/registration', methods=['GET', 'POST'])
 def reg():
     """Возвращает страницу с регистрацией"""
+    if current_user.is_authenticated:
+        return render_template('after_login.html')
     login = forms.RegistrationForm()
     if login.validate_on_submit():
         if Users.query.filter_by(email=login.email.data).first():
             flash('Пользователь c таким email-адресом уже существует.')
             return redirect(url_for('reg'))
 
-        user = Users(user_id=Users.query.count() + 1, email=login.email.data,
+        user = Users(id=Users.query.count() + 1, email=login.email.data,
                      password_hash=generate_password_hash(login.password.data),
                      token=generate_token.generate_token())
         db.session.add(user)
         db.session.commit()
         flash('Вы успешно зарегистрировались.')
+        login_user(user, remember=login.remember_me.data)
         return render_template('after_login.html')
     return render_template('registration.html', title='registration', form=login)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def get_token():
-    """Страница получения токена"""
+    """Страница аутентификации"""
+    if current_user.is_authenticated:
+        return render_template('after_login.html')
     login = forms.LoginForm()
     if login.validate_on_submit():
-        if not Users.query.filter_by(email=login.email.data).first():
+        user = Users.query.filter_by(email=login.email.data).first()
+        if not user:
             flash('Вы не зарегистрированы.')
             return redirect(url_for('get_token'))
 
@@ -53,17 +60,25 @@ def get_token():
             return redirect(url_for('get_token'))
 
         # flash(f'Ваш токен: {Users.query.filter_by(email=login.email.data).first().token}')
+        login_user(user, remember=login.remember_me.data)
         return render_template('after_login.html')
     return render_template('token.html', title='token', form=login)
 
 
 @app.route('/quote')
 def get_a_quote():
-    """Возвращает страницу home"""
+    """Возвращает страницу получения токена"""
     return render_template('get_quote.html', title='Home')
 
 
 @app.route('/add_quote')
 def add_quote():
-    """Возвращает страницу с документацией"""
+    """Возвращает страницу добавления токена"""
     return render_template('add_quote.html', title='Documentation')
+
+
+@app.route('/logout')
+def logout():
+    """Страница выхода"""
+    logout_user()
+    return redirect(url_for('get_token'))
