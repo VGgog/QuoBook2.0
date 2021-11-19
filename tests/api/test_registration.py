@@ -13,7 +13,7 @@ class AppTestCase(unittest.TestCase):
         app.config['SQLALCHEMY_DATABASE_URI'] = TEST_SQLALCHEMY_DATABASE_URI
 
         # Добавляет пользователя в бд, для проведения теста в методе test_login_in_exists()
-        db.session.add(Users(user_id=1, email='monoliza@google.com', password_hash=generate_password_hash('igrauchu')))
+        db.session.add(Users(id=1, email='monoliza@google.com', password_hash=generate_password_hash('igrauchu')))
         db.create_all()
 
     def tearDown(self):

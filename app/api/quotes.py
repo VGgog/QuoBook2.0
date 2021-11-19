@@ -74,7 +74,7 @@ def send_all_quote_id_which_add_user():
     if not (check.token_in_json(token_data) and check.token_in_db(token_data['token'])):
         return "The form of the submitted json is not correct.", 400
 
-    for quote in Quote.query.filter_by(user_id=Users.query.filter_by(token=token_data['token']).first().user_id):
+    for quote in Quote.query.filter_by(user_id=Users.query.filter_by(token=token_data['token']).first().id):
         quotes_id.append({'quote_id': quote.quote_id})
 
     if quotes_id:

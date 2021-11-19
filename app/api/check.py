@@ -4,7 +4,7 @@ from werkzeug.security import check_password_hash
 
 def user_and_quote_user_id(token, quote_id):
     """Проверяет user_id цитаты и user_id логина который отправили в запросе."""
-    return Users.query.filter_by(token=token).first().user_id == Quote.query.get_or_404(quote_id).user_id
+    return Users.query.filter_by(token=token).first().id == Quote.query.get_or_404(quote_id).user_id
 
 
 def token_in_db(token):

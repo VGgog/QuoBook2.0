@@ -12,7 +12,7 @@ class AppTestCase(unittest.TestCase):
         self.tester = app.test_client()
         app.config['TESTING'] = True
         app.config['SQLALCHEMY_DATABASE_URI'] = TEST_SQLALCHEMY_DATABASE_URI
-        db.session.add(Users(user_id=1, email='monoliza@google.com', password_hash=generate_password_hash('igrauchu'),
+        db.session.add(Users(id=1, email='monoliza@google.com', password_hash=generate_password_hash('igrauchu'),
                              token=generate_token.generate_token()))
         db.create_all()
 

@@ -21,7 +21,7 @@ def registration_new_user():
     if not validate_email(user_data['email']):
         return "Please write right email", 401
 
-    user = Users(user_id=Users.query.count() + 1, email=user_data['email'],
+    user = Users(id=Users.query.count() + 1, email=user_data['email'],
                  password_hash=generate_password_hash(user_data['password']), token=generate_token.generate_token())
     db.session.add(user)
     db.session.commit()

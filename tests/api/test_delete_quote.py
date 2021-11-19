@@ -19,9 +19,9 @@ class DelQuoteTestCase(unittest.TestCase):
                        author='Эрих Мария Ремарк', book_title='Ночь в Лиссабоне',
                        quote='Она еще не сдалась, но уже не боролась.')
         db.session.add(quote3)
-        db.session.add(Users(user_id=1, username='monoliza', password_hash=generate_password_hash('igrauchu'),
+        db.session.add(Users(id=1, email='monoliza@google.com', password_hash=generate_password_hash('igrauchu'),
                              token='sfgasgasgasgdasgf'))
-        db.session.add(Users(user_id=2, username='monoliza45', password_hash=generate_password_hash('igrauchu123'),
+        db.session.add(Users(id=2, email='monoliza45@google.com', password_hash=generate_password_hash('igrauchu123'),
                              token='dsgsdfdsfs'))
         db.create_all()
 

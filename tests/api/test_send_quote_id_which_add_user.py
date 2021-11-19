@@ -25,9 +25,9 @@ class SendQuoteTestCase(unittest.TestCase):
                        author='Эрих Мария Ремарк', book_title='Ночь в Лиссабоне',
                        quote='Она еще не сдалась, но уже не боролась.')
         db.session.add(quote3)
-        db.session.add(Users(user_id=1, username='monoliza', password_hash=generate_password_hash('igrauchu'),
+        db.session.add(Users(id=1, email='monoliza@google.com', password_hash=generate_password_hash('igrauchu'),
                              token='sfgasgasgasgdasgf'))
-        db.session.add(Users(user_id=2, username='monoliza45', password_hash=generate_password_hash('igrauchu123'),
+        db.session.add(Users(id=2, email='monoliza45@google.com', password_hash=generate_password_hash('igrauchu123'),
                              token='dsgsdfdsfs'))
         db.create_all()
 
@@ -37,7 +37,7 @@ class SendQuoteTestCase(unittest.TestCase):
 
     def test_send_all_quote_id_which_add_user(self):
         """Тестирование функции send_all_quote_id_which_add_user()"""
-        token = Users.query.filter_by(username='monoliza').first().token
+        token = Users.query.filter_by(email='monoliza@google.com').first().token
         response = self.tester.post('/api/all_quotes', data=json.dumps({
             'token': token}), content_type='application/json')
         self.assertEqual(response.status_code, 200)
@@ -46,7 +46,7 @@ class SendQuoteTestCase(unittest.TestCase):
 
     def test_send_all_quote_id_which_add_user_error(self):
         """Тестирование функции send_all_quote_id_which_add_user(), у пользователя нет добавленных цитат"""
-        token = Users.query.filter_by(username='monoliza45').first().token
+        token = Users.query.filter_by(email='monoliza45@google.com').first().token
         response = self.tester.post('/api/all_quotes', data=json.dumps({
             'token': token}), content_type='application/json')
         self.assertEqual(response.status_code, 404)
