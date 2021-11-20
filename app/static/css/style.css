@@ -50,3 +50,12 @@ ul#links li{
 	background: #ffffff;
 	text-align: center;
 }
+.home_content{
+	text-align: left;
+	line-height: 1.2em;
+}
+.home_content p{
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  font-size: 17px;
+}
