@@ -45,7 +45,6 @@ ul#links li{
 	right: 0;
 	width: 50%;
 	height: 100%;
-	line-height: 70px;
 	margin-top: 70px;
 	background: #ffffff;
 	text-align: center;
@@ -57,5 +56,15 @@ ul#links li{
 .home_content p{
   margin-top: 0.5em;
   margin-bottom: 1em;
+  font-size: 17px;
+}
+ul#main_links li{
+	display: inline-block;
+  padding: 7px 30px;
+  color: black;
+  margin: 3em 2em 3em;
+  text-align: center;
+  background: #DCDCDC;
+  border-radius: 3px;
   font-size: 17px;
 }
