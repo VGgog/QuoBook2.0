@@ -8,14 +8,7 @@ class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Запомнить меня')
-    submit = SubmitField('Token')
-
-
-class DeleteForm(FlaskForm):
-    """Форма аутентификации пользователя"""
-    username = StringField('username', validators=[DataRequired()])
-    password = PasswordField('password', validators=[DataRequired()])
-    submit = SubmitField('delete')
+    submit = SubmitField('Войти')
 
 
 class RegistrationForm(FlaskForm):
@@ -24,4 +17,4 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('password')])
     remember_me = BooleanField('Запомнить меня')
-    submit = SubmitField('Sign In')
+    submit = SubmitField('Зарегистрироваться')
