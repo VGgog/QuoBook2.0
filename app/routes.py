@@ -44,29 +44,28 @@ def reg():
 
 
 @app.route('/login', methods=['GET', 'POST'])
-def get_token():
+def login():
     """Страница аутентификации"""
     if current_user.is_authenticated:
         return render_template('after_login.html')
-    login = forms.LoginForm()
-    if login.validate_on_submit():
-        user = Users.query.filter_by(email=login.email.data).first()
+    login_data = forms.LoginForm()
+    if login_data.validate_on_submit():
+        user = Users.query.filter_by(email=login_data.email.data).first()
         if not user:
             flash('Вы не зарегистрированы.')
-            return redirect(url_for('get_token'))
+            return redirect(url_for('login'))
 
-        if not check_password_hash(Users.query.filter_by(email=login.email.data).first().password_hash,
-                                   login.password.data):
+        if not check_password_hash(Users.query.filter_by(email=login_data.email.data).first().password_hash,
+                                   login_data.password.data):
             flash('Пароль не верный.')
-            return redirect(url_for('get_token'))
+            return redirect(url_for('login'))
 
-        # flash(f'Ваш токен: {Users.query.filter_by(email=login.email.data).first().token}')
-        login_user(user, remember=login.remember_me.data)
+        login_user(user, remember=login_data.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             return render_template('after_login.html')
         return redirect(next_page)
-    return render_template('token.html', title='token', form=login)
+    return render_template('login.html', title='login', form=login_data)
 
 
 @app.route('/quote')
@@ -87,4 +86,4 @@ def logout():
     """Страница выхода"""
     logout_user()
     flash('Вы вышли из системы.')
-    return redirect(url_for('get_token'))
+    return redirect(url_for('login'))
