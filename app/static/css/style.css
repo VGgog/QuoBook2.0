@@ -74,21 +74,21 @@ ul#main_links li{
 .registration{
 	line-height: 3em	
 }
-.form-login-field{
+.auth-field{
 	height: 25px;
 	border: 3px, black;
 	background: #ffe5b4;
 	color: black;
   border-radius: 5px;	
 }
-.form-login-submit{
+.submit-field{
 	border: 3px, black;
 	height: 25px;
 	width: 150px;
 	background: #ffe5b4;
 	border-radius: 5px;
 }
-.form-login-remember-me{
+.remember-me-field{
 	height: 13px;
 	width: 13px;
 }
