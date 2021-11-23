@@ -72,19 +72,19 @@ ul#main_links li{
 	line-height: 3em
 }
 .registration{
-	line-height: 2em	
+	line-height: 3em	
 }
 .form-login-field{
 	height: 25px;
 	border: 3px, black;
 	background: #ffe5b4;
-	color: #ffe5b4;
+	color: black;
   border-radius: 5px;	
 }
 .form-login-submit{
 	border: 3px, black;
 	height: 25px;
-	width: 70px;
+	width: 150px;
 	background: #ffe5b4;
 	border-radius: 5px;
 }

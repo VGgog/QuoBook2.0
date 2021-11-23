@@ -13,8 +13,9 @@ class LoginForm(FlaskForm):
 
 class RegistrationForm(FlaskForm):
     """Форма регистрации нового пользователя"""
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    password2 = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('password')])
+    email = StringField(validators=[DataRequired(), Email()], render_kw={"placeholder": "Email"})
+    password = PasswordField(validators=[DataRequired()], render_kw={"placeholder": "Password"})
+    password2 = PasswordField(validators=[DataRequired(), EqualTo('password')],
+                              render_kw={"placeholder": "Repeat password"})
     remember_me = BooleanField('Запомнить меня')
     submit = SubmitField('Зарегистрироваться')
