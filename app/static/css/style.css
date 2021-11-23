@@ -19,14 +19,14 @@ h1{
 	text-align: center;
 	font-size: 50px;
 	height: 85px;
-	background: #DCDCDC;
+	background: #ffe5b4;
 	line-height: 2em;
 }
 .header_links{
 	height: 40px;
 	position: fixed;
 	text-align: center;
-	background: #D3D3D3;
+	background: #FFCC99;
   width: 100%;
 
 }
