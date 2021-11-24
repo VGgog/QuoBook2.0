@@ -92,3 +92,35 @@ ul#main_links li{
 	height: 13px;
 	width: 13px;
 }
+.forms{
+	line-height: 3em;
+  text-align: center;
+}
+.auth-field-token{
+	height: 25px;
+	border: 3px, black;
+	background: #ffe5b4;
+	color: black;
+  border-radius: 5px;	
+}
+.submit-field-token{
+	border: 3px, black;
+	height: 25px;
+	width: 150px;
+	background: #ffe5b4;
+	border-radius: 5px;
+}
+input{
+	width: 300px;
+  height: 25px;
+	border: 3px, black;
+	background: #ffe5b4;
+	color: black;
+  border-radius: 5px;
+}
+.token{
+	padding: 25px;
+}
+.documentation{
+	padding: 50px;
+}

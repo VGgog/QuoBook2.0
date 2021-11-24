@@ -19,3 +19,11 @@ class RegistrationForm(FlaskForm):
                               render_kw={"placeholder": "Repeat password"})
     remember_me = BooleanField('Запомнить меня')
     submit = SubmitField('Зарегистрироваться')
+
+
+class AuthForm(FlaskForm):
+    """Форма для получения токена"""
+    email = StringField(validators=[DataRequired(), Email()], render_kw={"placeholder": "Email"})
+    password = PasswordField(validators=[DataRequired()], render_kw={"placeholder": "Password"})
+    submit = SubmitField('Получить токен')
+

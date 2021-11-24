@@ -15,10 +15,24 @@ def home():
     return render_template('home.html', title='Home')
 
 
-@app.route('/documentation')
+@app.route('/documentation', methods=['GET', 'POST'])
 def docs():
     """Возвращает страницу с документацией"""
-    return render_template('documentation.html', title='Documentation')
+    token_form = forms.AuthForm()
+    if token_form.validate_on_submit():
+        user = Users.query.filter_by(email=token_form.email.data).first()
+        if not user:
+            flash('Вы не зарегистрированы.')
+            return redirect(url_for('docs'))
+
+        if not check_password_hash(Users.query.filter_by(email=token_form.email.data).first().password_hash,
+                                   token_form.password.data):
+            flash('Пароль не верный.')
+            return redirect(url_for('docs'))
+
+        message = user.token
+        return render_template('documentation.html', title='Documentation', form=token_form, message=message)
+    return render_template('documentation.html', title='Documentation', form=token_form)
 
 
 @app.route('/registration', methods=['GET', 'POST'])

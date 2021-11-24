@@ -1,5 +1,46 @@
 {% extends "base.html" %}
 
 {% block content %}
-Здесь скоро будет документация к API
+<div class="Token-Login">
+    <h2>Получить токен</h2>
+    <div class="forms">
+        <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.email(size=32, class_="auth-field-token") }}<br>
+                {% for error in form.email.errors %}
+                <span style="color: #D2691E;">{{'Укажите правильный email-адрес'}}</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.password(size=32, class_="auth-field-token") }}<br>
+                {% for error in form.password.errors %}
+                <span style="color: #D2691E;">{{'Это поле должно быть заполнено.'}}</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit(class_="submit-field-token") }}</p>
+        </form>
+        <div class="token-flash-message">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                <li style="color: #D2691E;">{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+    <div class="token">
+        {% if message %}
+        <input type="text" value={{ message }}>
+        {% else %}
+        <input type="text" placeholder="Ваш токен: ">
+        {% endif %}
+    </div>
+</div>
+<div class="documentation">
+<p>Здесь скоро будет документация к API</p>
+</div>
 {% endblock %}
