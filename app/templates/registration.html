@@ -23,6 +23,15 @@
                 <span style="color: #D2691E;">{{'Пароли не совпадают.'}}</span>
                 {% endfor %}
             </p>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                <li style="color: #D2691E;">{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
             <p>{{ form.remember_me(class_="remember-me-field") }} {{ form.remember_me.label }}</p>
             <p>{{ form.submit(class_="submit-field") }}</p>
         </form>
