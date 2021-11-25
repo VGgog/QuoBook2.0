@@ -19,6 +19,12 @@ def home():
 def docs():
     """Возвращает страницу с документацией к Api"""
     token_form = forms.AuthForm()
+    if current_user.is_authenticated:
+        # Сразу отображает токен пользователя в поле, если пользователь уже вошёл в систему.
+        email = current_user.email
+        return render_template('documentation.html', title='Documentation', form=token_form,
+                               message=Users.query.filter_by(email=email).first().token)
+
     if token_form.validate_on_submit():
         user = Users.query.filter_by(email=token_form.email.data).first()
         if not user:
