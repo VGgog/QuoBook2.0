@@ -41,6 +41,22 @@
     </div>
 </div>
 <div class="documentation">
-<p>Здесь скоро будет документация к API</p>
+    <h3>Документация к API</h3>
+    <div class="paragraph">
+        <p class="docs_text">Регистрация нового пользователя(POST-method) - получить токен, если пользователь ещё не зарегистрирован.<br>
+        url - "/api/registration"</p>
+        <p class="docs_text">Запрос - json с полями "email" и "password"<p>
+        <div class="examples"><p class="examples1"> {"email": "monoliza@clon.ru",</p><p class="examples2">"password": "moirobot"}</p></div>
+        <p class="docs_text">Ответ - json с токеном для дальнейшей работы с api</p>
+        <p class="examples1"> {"token": "dxhsnsjsnjsjdixjdhehdh"}</p>
+    </div>
+    <div class="paragraph">
+        <p class="docs_text">Получить токен, зарегистрированного пользователя(POST-method) - получить токен, если пользователь уже зарегистрирован.<br>
+        url - "/api/"</p>
+        <p class="docs_text">Запрос - json с полями "email" и "password"<p>
+        <div class="examples"><p class="examples1"> {"email": "monoliza@clon.ru",</p><p class="examples2">"password": "moirobot"}</p></div>
+        <p class="docs_text">Ответ - json с токеном для дальнейшей работы с api<p>
+        <p class="examples1"> {"token": "dxhsnsjsnjsjdixjdhehdh"}</p>
+    </div>
 </div>
 {% endblock %}
