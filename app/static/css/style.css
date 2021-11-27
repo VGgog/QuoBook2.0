@@ -11,6 +11,7 @@ details summary::-webkit-details-marker {
 	text-decoration: none;
 }
 body{
+	overflow: auto;
 	max-width: 100%;
 	background: #ffffff;
 }
@@ -23,7 +24,6 @@ h1{
 }
 .header_links{
 	height: 40px;
-	position: fixed;
 	text-align: center;
 	background: #FFCC99;
   width: 100%;
@@ -37,7 +37,6 @@ ul#links li{
   line-height: 2.5em;
 }
 .content{
-	position: fixed;
 	margin-right: 25%;
 	margin-left: 25%;
 	right: 0;
