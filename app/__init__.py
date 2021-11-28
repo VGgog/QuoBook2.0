@@ -7,6 +7,7 @@ from flask_login import LoginManager
 app = Flask(__name__)
 login = LoginManager(app)
 login.login_view = 'login'
+login.login_message = "Чтобы получить доступ к этой странице, Вам надо авторизоваться."
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
