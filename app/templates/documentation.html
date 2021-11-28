@@ -77,7 +77,7 @@
         </div>
     </div>
     <div class="paragraph">
-       <h4 class="docs_text">Получить определённую цитаты(GET-methods)</h4>
+       <h4 class="docs_text">Получить определённую цитату(GET-methods)</h4>
        <p class="docs_text">url - /api/quote/"id цитаты, которую хотите получить"</p>
        <p class="example">Пример: /api/quote/14</p>
        <p class="docs_text">Ответ - json с цитатой</p>
@@ -90,7 +90,7 @@
         </div>
     </div>
     <div class="paragraph">
-       <h4 class="docs_text">Получить определённую цитаты(GET-methods)</h4>
+       <h4 class="docs_text">Получить определённую цитату(GET-methods)</h4>
        <p class="docs_text">url - /api/quote/"автор цитаты или названия источника"</p>
        <p class="example">Пример: /api/quote/Рей%20Брэдбери</p>
        <p class="docs_text">Ответ - json с цитатой</p>
@@ -103,7 +103,7 @@
         </div>
     </div>
     <div class="paragraph">
-       <h4 class="docs_text">Получить определённую цитаты(GET-methods)</h4>
+       <h4 class="docs_text">Получить определённую цитату(GET-methods)</h4>
        <p class="docs_text">url - /api/quote/"Автор Цитаты"/"Название источника"</p>
        <p class="example">Пример: /api/quote/Рей%20Брэдбери/Вино%20из%20одуванчиков</p>
        <p class="docs_text">Ответ - json с цитатой</p>
@@ -124,9 +124,10 @@
     <div class="paragraph">
         <h4 class="docs_text">Добавить цитату(POST-method)</h4>
         <p class="docs_text">url - /api/new_quote</p>
-        <p class="docs_text">Запрос - json с полями "token" и "quote" а в quote поля "author", "book_title", "quote"<p>
+        <p class="docs_text">Запрос - json с полями "token" и "quote" а в quote поля "author", "book_title", "quote"<br>
+        (Токен можно получить в начале страницы, при аутентификации или регистрации в api)</p>
         <div class="examples">
-            <p class="examples1">{"token": sklajdlaksjdfajdf;asdj,</p>
+            <p class="examples1">{"token": "Ваш токен",</p>
             <p class="examples2">"quote": {"author": "автор цитаты",</p>
             <p class="examples3">"book_title": "Название источника",</p>
             <p class="examples3">"quote": "цитата"}</p>
@@ -144,10 +145,12 @@
         <h4 class="docs_text">Удалить цитату(DELETE-method)</h4>
         <p class="docs_text">url - /api/del_quote</p>
         <p class="example">Пример: /api/del_quote/3</p>
+        <p class="docs_text">Запрос json с токеном</p>
+        <p class="examples">{"token": "Ваш токен"}</p>
         <p class="docs_text">Ответ - json с удалённой цитатой</p>
         <div class="examples">
             <p class="examples1">{"user_id": 1,</p>
-            <p class="examples2">"quote_id": 2,</p>
+            <p class="examples2">"quote_id": 3,</p>
             <p class="examples2">"quote": {"author": "автор цитаты",</p>
             <p class="examples3">"book_title": "Название источника",</p>
             <p class="examples3">"quote": "цитата"}</p>
