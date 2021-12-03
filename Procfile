@@ -1,1 +1,1 @@
-web: flask db upgrade; gunicorn quobook:app
+web: flask db upgrade; gunicorn main:app
