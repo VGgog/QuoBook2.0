@@ -155,3 +155,9 @@ input{
 .add_quote_button_field{
 	width: 150px;
 }
+.del_quote_button_field{
+	width: 150px;
+}
+.del_quote{
+	line-height: 3em
+}

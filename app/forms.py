@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, IntegerField
 from wtforms.validators import DataRequired, Email, EqualTo
 
 
@@ -34,3 +34,9 @@ class AddQuoteForm(FlaskForm):
     book_title = StringField(validators=[DataRequired()], render_kw={"placeholder": "Название книги"})
     quote = TextAreaField(validators=[DataRequired()], render_kw={"placeholder": "Цитата", "rows": 10, "cols": 39})
     add_quote = SubmitField('Добавить цитату')
+
+
+class DelQuoteForm(FlaskForm):
+    """Форма удаления цитаты"""
+    quote_id = IntegerField(validators=[DataRequired()], render_kw={"placeholder": "ID цитаты"})
+    del_quote = SubmitField('Удалить цитату')

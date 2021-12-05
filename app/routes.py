@@ -104,10 +104,13 @@ def add_quote():
     return render_template('add_quote.html', title='Documentation', form=quote_data)
 
 
-@app.route('/del_quote')
+@app.route('/del_quote', methods=['GET', 'POST'])
 def del_quote():
     """Страница удаления цитаты"""
-    return render_template('del_quote.html', title='Удалить цитату')
+    del_quote_data = forms.DelQuoteForm()
+    if del_quote_data.validate_on_submit():
+        return redirect(url_for('del_quote'))
+    return render_template('del_quote.html', title='Удалить цитату', form=del_quote_data)
 
 
 @app.route('/logout')
