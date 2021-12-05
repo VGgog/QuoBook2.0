@@ -34,5 +34,8 @@
             {% endwith %}
             <p>{{ form.add_quote(class_="add_quote_button_field") }}</p>
         </form>
+    <ul>
+        <li><a href="{{ url_for('del_quote') }}">Удалить цитату</a></li>
+    </ul>
 </div>
 {% endblock %}

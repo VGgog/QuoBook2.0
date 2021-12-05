@@ -104,6 +104,12 @@ def add_quote():
     return render_template('add_quote.html', title='Documentation', form=quote_data)
 
 
+@app.route('/del_quote')
+def del_quote():
+    """Страница удаления цитаты"""
+    return render_template('del_quote.html', title='Удалить цитату')
+
+
 @app.route('/logout')
 def logout():
     """Страница выхода пользователя"""
