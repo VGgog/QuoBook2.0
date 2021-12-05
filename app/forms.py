@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
 from wtforms.validators import DataRequired, Email, EqualTo
 
 
@@ -27,3 +27,10 @@ class AuthForm(FlaskForm):
     password = PasswordField(validators=[DataRequired()], render_kw={"placeholder": "Password"})
     submit = SubmitField('Получить токен')
 
+
+class AddQuoteForm(FlaskForm):
+    """Форма добавления цитаты"""
+    author = StringField(validators=[DataRequired()], render_kw={"placeholder": "Автор"})
+    book_title = StringField(validators=[DataRequired()], render_kw={"placeholder": "Название книги"})
+    quote = TextAreaField(validators=[DataRequired()], render_kw={"placeholder": "Цитата", "rows": 10, "cols": 39})
+    add_quote = SubmitField('Добавить цитату')

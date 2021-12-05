@@ -94,11 +94,14 @@ def get_a_quote():
     return render_template('get_quote.html', title='Home')
 
 
-@app.route('/add_quote')
+@app.route('/add_quote', methods=['GET', 'POST'])
 @login_required
 def add_quote():
     """Страница добавления новых цитат"""
-    return render_template('add_quote.html', title='Documentation')
+    quote_data = forms.AddQuoteForm()
+    if quote_data.validate_on_submit():
+        return redirect(url_for('add_quote'))
+    return render_template('add_quote.html', title='Documentation', form=quote_data)
 
 
 @app.route('/logout')

@@ -1,5 +1,38 @@
 {% extends "base.html" %}
 
 {% block content %}
-Здесь можно будет добавить цитату
+<div class="add_quote">
+    <h2>Добавить цитату</h2>
+        <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.author(size=32, class_="add_author_field") }}<br>
+                {% for error in form.author.errors %}
+                <span style="color: #D2691E;">{{'Это поле должно быть заполнено'}}</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.book_title(size=32, class_="add_book_title_field") }}<br>
+                {% for error in form.book_title.errors %}
+                <span style="color: #D2691E;">{{'Это поле должно быть заполнено.'}}</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.quote(size=64, class_="add_quote_field") }}<br>
+                {% for error in form.quote.errors %}
+                <span style="color: #D2691E;">{{'Это поле должно быть заполнено.'}}</span>
+                {% endfor %}
+            </p>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                <li style="color: #D2691E;">{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+            <p>{{ form.add_quote(class_="add_quote_button_field") }}</p>
+        </form>
+</div>
 {% endblock %}

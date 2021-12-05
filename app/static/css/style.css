@@ -141,3 +141,17 @@ input{
 .documentation p.examples3{
 	padding-left: 95px;
 }
+.add_quote{
+	line-height: 3em
+}
+.add_quote_field{
+	resize: none;
+	margin-top: 1em;
+	border: 5px, black;
+	background: #ffe5b4;
+	color: black;
+  border-radius: 5px;	
+}
+.add_quote_button_field{
+	width: 150px;
+}
