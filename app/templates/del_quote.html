@@ -11,6 +11,15 @@
                 <span style="color: #D2691E;">{{'Введите id-цитаты.'}}</span>
                 {% endfor %}
             </p>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                <li style="color: #D2691E;">{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
             <p>{{ form.del_quote(class_="del_quote_button_field") }}</p>
         </form>
 </div>
