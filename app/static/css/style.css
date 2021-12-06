@@ -161,3 +161,9 @@ input{
 .del_quote{
 	line-height: 3em
 }
+.get_quote{
+	line-height: 3em;
+}
+.get_quote_button_field{
+	width: 150px;
+}

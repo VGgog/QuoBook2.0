@@ -1,5 +1,38 @@
 {% extends "base.html" %}
 
 {% block content %}
-Здесь можно будет получить цитату
+<div class="get_quote">
+    <h2>Получить цитату</h2>
+        <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.quote_id(size=32, class_="get_quote_id_field") }}<br>
+                {% for error in form.quote_id.errors %}
+                <span style="color: #D2691E;">{{'Введите id-цитаты.'}}</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.author(size=32, class_="get_author_field") }}<br>
+                {% for error in form.author.errors %}
+                <span style="color: #D2691E;">{{'Это полу должно быть заполнено'}}</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.book_title(size=32, class_="get_book_title_field") }}<br>
+                {% for error in form.book_title.errors %}
+                <span style="color: #D2691E;">{{'Введите id-цитаты.'}}</span>
+                {% endfor %}
+            </p>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                <li style="color: #D2691E;">{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+            <p>{{ form.get_quote(class_="get_quote_button_field") }}</p>
+        </form>
+</div>
 {% endblock %}

@@ -40,3 +40,11 @@ class DelQuoteForm(FlaskForm):
     """Форма удаления цитаты"""
     quote_id = IntegerField(validators=[DataRequired()], render_kw={"placeholder": "ID цитаты"})
     del_quote = SubmitField('Удалить цитату')
+
+
+class GetQuoteForm(FlaskForm):
+    """Форма получения цитат"""
+    quote_id = StringField(render_kw={"placeholder": "ID цитаты"})
+    author = StringField(render_kw={"placeholder": "Автор"})
+    book_title = StringField(render_kw={"placeholder": "Название книги"})
+    get_quote = SubmitField('Получить цитату')
