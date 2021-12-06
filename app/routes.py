@@ -110,7 +110,7 @@ def add_quote():
         db.session.add(Quote(user_id=user_id, quote_id=quote_id,  author=quote_data.author.data,
                              book_title=quote_data.book_title.data, quote=quote_data.quote.data))
         db.session.commit()
-        
+
         flash(f'Цитата добавлена.\nid-цитаты - {quote_id}')
         return redirect(url_for('add_quote'))
     return render_template('add_quote.html', title='Documentation', form=quote_data)
@@ -121,6 +121,20 @@ def del_quote():
     """Страница удаления цитаты"""
     del_quote_data = forms.DelQuoteForm()
     if del_quote_data.validate_on_submit():
+        quote_id = del_quote_data.quote_id.data
+        quote = Quote.query.filter_by(quote_id=quote_id).first()
+
+        if not quote:
+            flash('Цитата не найдена.')
+            return redirect(url_for('del_quote'))
+
+        if not quote.user_id == Users.query.filter_by(email=current_user.email).first().id:
+            flash('У вас нет доступа удалить данную цитату.')
+            return redirect(url_for('del_quote'))
+
+        db.session.delete(quote)
+        db.session.commit()
+        flash('Цитата удалена.')
         return redirect(url_for('del_quote'))
     return render_template('del_quote.html', title='Удалить цитату', form=del_quote_data)
 
