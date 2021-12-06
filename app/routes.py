@@ -3,7 +3,7 @@ from flask import render_template, flash, redirect, url_for, request
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.urls import url_parse
 import app.forms as forms
-from app.models import Users
+from app.models import Users, Quote
 from app import generate_token
 from flask_login import logout_user, login_user, current_user, login_required
 
@@ -100,6 +100,18 @@ def add_quote():
     """Страница добавления новых цитат"""
     quote_data = forms.AddQuoteForm()
     if quote_data.validate_on_submit():
+        # Проверка на наличие этой цитаты в базу данных
+        if Quote.query.filter_by(quote=quote_data.quote.data).first():
+            flash('Такая цитата уже добавлена.')
+            return redirect(url_for('add_quote'))
+        # Добавляет цитату в базу данных
+        user_id = Users.query.filter_by(email=current_user.email).first().id
+        quote_id = Quote.query.count() + 1
+        db.session.add(Quote(user_id=user_id, quote_id=quote_id,  author=quote_data.author.data,
+                             book_title=quote_data.book_title.data, quote=quote_data.quote.data))
+        db.session.commit()
+        
+        flash(f'Цитата добавлена.\nid-цитаты - {quote_id}')
         return redirect(url_for('add_quote'))
     return render_template('add_quote.html', title='Documentation', form=quote_data)
 
