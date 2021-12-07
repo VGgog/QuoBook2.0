@@ -94,17 +94,33 @@ def get_a_quote():
     """Страница получения цитат"""
     quote_data = forms.GetQuoteForm()
     if quote_data.validate_on_submit():
+        author = quote_data.author.data
+        book_title = quote_data.book_title.data
+
         if quote_data.quote_id.data:
             quote = Quote.query.filter_by(quote_id=quote_data.quote_id.data).first()
             if quote:
                 return render_template('get_quote.html', title='Quote', form=quote_data, quote_info=quote)
-            else:
-                flash("Цитата не найдена.")
-                return redirect(url_for('get_a_quote'))
+        elif author or book_title:
+            if author and book_title:
+                quote = Quote.query.filter_by(author=author, book_title=book_title).first()
+                if quote:
+                    return render_template('get_quote.html', title='Quote', form=quote_data, quote_info=quote)
+            if author:
+                quote = Quote.query.filter_by(author=author).first()
+                if quote:
+                    return render_template('get_quote.html', title='Quote', form=quote_data, quote_info=quote)
+            if book_title:
+                quote = Quote.query.filter_by(book_title=book_title).first()
+                if quote:
+                    return render_template('get_quote.html', title='Quote', form=quote_data, quote_info=quote)
         else:
             quote_id = random.randrange(1, Quote.query.count())
             quote = Quote.query.filter_by(quote_id=quote_id).first()
             return render_template('get_quote.html', title='Quote', form=quote_data, quote_info=quote)
+
+        flash("Цитата не найдена.")
+        return redirect(url_for('get_a_quote'))
     return render_template('get_quote.html', title='Quote', form=quote_data)
 
 
