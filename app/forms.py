@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, IntegerField
-from wtforms.validators import DataRequired, Email, EqualTo
+from wtforms.validators import DataRequired, Email, EqualTo, Optional
 
 
 class LoginForm(FlaskForm):
@@ -44,7 +44,7 @@ class DelQuoteForm(FlaskForm):
 
 class GetQuoteForm(FlaskForm):
     """Форма получения цитат"""
-    quote_id = IntegerField(render_kw={"placeholder": "ID цитаты"})
+    quote_id = IntegerField(validators=[Optional()], render_kw={"placeholder": "ID цитаты"})
     author = StringField(render_kw={"placeholder": "Автор"})
     book_title = StringField(render_kw={"placeholder": "Название книги"})
     get_quote = SubmitField('Получить цитату')
