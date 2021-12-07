@@ -34,5 +34,16 @@
             {% endwith %}
             <p>{{ form.get_quote(class_="get_quote_button_field") }}</p>
         </form>
+    {% if quote_info %}
+    <div class="quote_field">
+        <div class="quote">
+            <p class="quote_text">{{ quote_info.quote }}</p>
+            <div class="quote_info">
+                <p class="book_title">"{{ quote_info.book_title }}"</p>
+                <p class="author">{{ quote_info.author }}</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

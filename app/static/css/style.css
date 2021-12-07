@@ -167,3 +167,26 @@ input{
 .get_quote_button_field{
 	width: 150px;
 }
+.quote_field{
+	margin: auto;
+	margin-top: 3em;
+	width: 600px;
+	border: 3px, black;
+	background: #fff6e6;
+	color: black;
+  border-radius: 5px;
+}
+.quote{
+	display: inline-block;
+	margin: 20px;
+}
+.quote_text{
+	line-height: 1em;
+	text-align: left;
+}
+.quote_info{
+	line-height: 1em;
+	text-align: right;
+	margin-top: 1em;
+	font-size: 85%;
+}
