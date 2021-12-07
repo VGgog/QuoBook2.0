@@ -1,3 +1,4 @@
+import random
 from app import app, db
 from flask import render_template, flash, redirect, url_for, request
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -93,13 +94,17 @@ def get_a_quote():
     """Страница получения цитат"""
     quote_data = forms.GetQuoteForm()
     if quote_data.validate_on_submit():
-        if quote_data.quote_id:
+        if quote_data.quote_id.data:
             quote = Quote.query.filter_by(quote_id=quote_data.quote_id.data).first()
             if quote:
                 return render_template('get_quote.html', title='Quote', form=quote_data, quote_info=quote)
             else:
                 flash("Цитата не найдена.")
                 return redirect(url_for('get_a_quote'))
+        else:
+            quote_id = random.randrange(1, Quote.query.count())
+            quote = Quote.query.filter_by(quote_id=quote_id).first()
+            return render_template('get_quote.html', title='Quote', form=quote_data, quote_info=quote)
     return render_template('get_quote.html', title='Quote', form=quote_data)
 
 
