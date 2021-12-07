@@ -88,10 +88,19 @@ def login():
     return render_template('login.html', title='login', form=login_data)
 
 
-@app.route('/quote')
+@app.route('/quote', methods=['GET', 'POST'])
 def get_a_quote():
     """Страница получения цитат"""
-    return render_template('get_quote.html', title='Home')
+    quote_data = forms.GetQuoteForm()
+    if quote_data.validate_on_submit():
+        if quote_data.quote_id:
+            quote = Quote.query.filter_by(quote_id=quote_data.quote_id.data).first()
+            if quote:
+                return render_template('get_quote.html', title='Quote', form=quote_data, quote_info=quote)
+            else:
+                flash("Цитата не найдена.")
+                return redirect(url_for('get_a_quote'))
+    return render_template('get_quote.html', title='Quote', form=quote_data)
 
 
 @app.route('/add_quote', methods=['GET', 'POST'])
