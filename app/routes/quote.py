@@ -64,6 +64,7 @@ def add_quote():
 
 
 @app.route('/del_quote', methods=['GET', 'POST'])
+@login_required
 def del_quote():
     """Страница удаления цитаты"""
     del_quote_data = forms.DelQuoteForm()
