@@ -4,8 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 import logging
-import os
-from logging.handlers import SMTPHandler, RotatingFileHandler
+from logging.handlers import SMTPHandler
 
 app = Flask(__name__)
 login = LoginManager(app)
@@ -37,4 +36,5 @@ from app.api import bp as api_bp
 app.register_blueprint(api_bp, url_prefix='/api')
 
 
-from app import routes, models
+from app import models
+from app.routes import user, quote
