@@ -2,15 +2,14 @@
 
 {% block content %}
 <div class="get_quote">
-    <h2>Получить цитату</h2>
         <form action="" method="post" novalidate>
             {{ form.hidden_tag() }}
-            <p>
+            <!--p>
                 {{ form.quote_id(size=32, class_="get_quote_id_field") }}<br>
                 {% for error in form.quote_id.errors %}
                 <span style="color: #D2691E;">{{'Введите id-цитаты.'}}</span>
                 {% endfor %}
-            </p>
+            </p-->
             <p>
                 {{ form.author(size=32, class_="get_author_field") }}<br>
                 {% for error in form.author.errors %}
