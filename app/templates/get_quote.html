@@ -4,12 +4,14 @@
 <div class="get_quote">
         <form action="" method="post" novalidate>
             {{ form.hidden_tag() }}
-            <!--p>
+            {% if current_user.is_authenticated %}
+            <p>
                 {{ form.quote_id(size=32, class_="get_quote_id_field") }}<br>
                 {% for error in form.quote_id.errors %}
                 <span style="color: #D2691E;">{{'Введите id-цитаты.'}}</span>
                 {% endfor %}
-            </p-->
+            </p>
+            {% endif %}
             <p>
                 {{ form.author(size=32, class_="get_author_field") }}<br>
                 {% for error in form.author.errors %}

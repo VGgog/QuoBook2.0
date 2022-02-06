@@ -6,7 +6,7 @@ from app.models import Users, Quote
 from flask_login import current_user, login_required
 
 
-@app.route('/quote', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def get_a_quote():
     """Страница получения цитат"""
     quote_data = forms.GetQuoteForm()

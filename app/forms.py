@@ -6,7 +6,7 @@ from wtforms.validators import DataRequired, Email, EqualTo, Optional
 class LoginForm(FlaskForm):
     """Форма аутентификации пользователя"""
     email = StringField(validators=[DataRequired(), Email()], render_kw={"placeholder": "Email"})
-    password = PasswordField(validators=[DataRequired()], render_kw={"placeholder": "Password"})
+    password = PasswordField(validators=[DataRequired()], render_kw={"placeholder": "Пароль"})
     remember_me = BooleanField('Запомнить меня')
     submit = SubmitField('Войти')
 
@@ -14,7 +14,7 @@ class LoginForm(FlaskForm):
 class RegistrationForm(FlaskForm):
     """Форма регистрации нового пользователя"""
     email = StringField(validators=[DataRequired(), Email()], render_kw={"placeholder": "Email"})
-    password = PasswordField(validators=[DataRequired()], render_kw={"placeholder": "Password"})
+    password = PasswordField(validators=[DataRequired()], render_kw={"placeholder": "Пароль"})
     password2 = PasswordField(validators=[DataRequired(), EqualTo('password')],
                               render_kw={"placeholder": "Repeat password"})
     remember_me = BooleanField('Запомнить меня')
@@ -24,7 +24,7 @@ class RegistrationForm(FlaskForm):
 class AuthForm(FlaskForm):
     """Форма для получения токена"""
     email = StringField(validators=[DataRequired(), Email()], render_kw={"placeholder": "Email"})
-    password = PasswordField(validators=[DataRequired()], render_kw={"placeholder": "Password"})
+    password = PasswordField(validators=[DataRequired()], render_kw={"placeholder": "Пароль"})
     submit = SubmitField('Получить токен')
 
 

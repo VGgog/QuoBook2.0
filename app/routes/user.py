@@ -8,13 +8,6 @@ from app import generate_token
 from flask_login import logout_user, login_user, current_user
 
 
-@app.route('/')
-@app.route('/home')
-def home():
-    """Возвращает страницу home"""
-    return render_template('home.html', title='Home')
-
-
 @app.route('/documentation', methods=['GET', 'POST'])
 def docs():
     """Возвращает страницу с документацией к Api"""

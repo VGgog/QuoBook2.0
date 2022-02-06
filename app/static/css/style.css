@@ -98,11 +98,11 @@ ul#links li{
 }
 input{
 	width: 400px;
-    height: 35px;
+    height: 25px;
 	background: #ffe5b4;
 	color: black;
     border-radius: 5px;
-	font-size: 17px;
+	font-size: 15px;
 }
 input:focus{
     outline: none;
@@ -149,11 +149,13 @@ input:focus{
 }
 .add_quote_field{
 	resize: none;
+	width: 400px;
 	margin-top: 1em;
 	border: 5px, black;
 	background: #ffe5b4;
 	color: black;
-    border-radius: 5px;	
+    border-radius: 5px;
+	font-size: 15px;
 }
 .add_quote_button_field{
 	width: 150px;
@@ -165,7 +167,7 @@ input:focus{
 	line-height: 3em
 }
 .get_quote{
-	line-height: 5em;
+	line-height: 3em;
 }
 .get_quote_button_field{
 	width: 150px;

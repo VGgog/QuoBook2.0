@@ -26,11 +26,10 @@
             </ul>
             {% endif %}
             {% endwith %}
-            <p>{{ form.remember_me(class_="remember-me-field") }} {{ form.remember_me.label }}</p>
             <p>{{ form.submit(class_="submit-field") }}</p>
         </form>
     <ul>
-        <li><a href="{{ url_for('reg') }}">Registration</a></li>
+        <li><a href="{{ url_for('reg') }}">Зарегистрироваться</a></li>
     </ul>
 </div>
 {% endblock %}

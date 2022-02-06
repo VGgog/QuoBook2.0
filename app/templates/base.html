@@ -9,10 +9,9 @@
 <h1>QuoBook</h1>
 <div class="header_links">
     <ul id="links">
-        <li><a href="{{ url_for('home') }}">Home</a></li>
         <li><a href="{{ url_for('get_a_quote') }}">Цитата</a></li>
         <li><a href="{{ url_for('add_quote') }}">Добавить цитату</a></li>
-        <li><a href="{{ url_for('docs') }}">API</a></li>
+        <li><a href="{{ url_for('del_quote') }}">Удалить цитату</a></li>
         {% if current_user.is_anonymous %}
         <li><a href="{{ url_for('login') }}">Войти</a></li>
         {% else %}
