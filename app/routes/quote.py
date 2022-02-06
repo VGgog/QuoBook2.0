@@ -69,6 +69,7 @@ def del_quote():
     """Страница удаления цитаты"""
     del_quote_data = forms.DelQuoteForm()
     if del_quote_data.validate_on_submit():
+
         quote_id = del_quote_data.quote_id.data
         quote = Quote.query.filter_by(quote_id=quote_id).first()
 
@@ -82,6 +83,18 @@ def del_quote():
 
         db.session.delete(quote)
         db.session.commit()
+
+        # После удаления цитаты остаётся пустой id цитаты.
+        # При добалении новой цитаты, этот id не считается приложением, 
+        # и получается так, что приложение пытается добавить новую цитаты на id, который уже занят.
+        # Чтобы такого не случилось последней цитатой занимаю пустой quote_id.
+        last_quote_id = Quote.query.count()
+        quote = Quote.query.filter_by(quote_id=last_quote_id).first()
+        quote.quote_id = quote_id
+        db.session.commit()
+
         flash('Цитата удалена.')
         return redirect(url_for('del_quote'))
+
     return render_template('del_quote.html', title='Удалить цитату', form=del_quote_data)
+
